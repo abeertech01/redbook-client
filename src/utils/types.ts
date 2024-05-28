@@ -14,6 +14,11 @@ export interface SIGNUP_USER_PAYLOAD {
   password: string
 }
 
+export interface LOGIN_USER_PAYLOAD {
+  userAddress: string
+  password: string
+}
+
 export interface InitialStateType {
   user: User | null
   loader: boolean
