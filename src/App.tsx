@@ -1,10 +1,13 @@
+import { useSelector } from "react-redux"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
-import Home from "./pages/Home"
-import NotFound from "./pages/NotFound"
-import Profile from "./pages/Profile"
+import { useGetProfileQuery } from "./app/api/api"
+import { RootState } from "./app/store"
 import Chat from "./pages/Chat"
+import Home from "./pages/Home"
 import Inbox from "./pages/Inbox"
 import Login from "./pages/Login"
+import NotFound from "./pages/NotFound"
+import Profile from "./pages/Profile"
 
 const router = createBrowserRouter([
   {
