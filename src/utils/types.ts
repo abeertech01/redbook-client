@@ -7,6 +7,12 @@ export interface User {
   updatedAt: Date
 }
 
+export interface FetchedUser {
+  success: boolean
+  message: string
+  user: User
+}
+
 export interface SIGNUP_USER_PAYLOAD {
   name: string
   username: string

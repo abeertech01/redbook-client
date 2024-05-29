@@ -2,16 +2,21 @@ import React, { useState } from "react"
 import logo from "../assets/RedBook.svg"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import clsx from "clsx"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch } from "../app/store"
 import { signupUser, loginUser as loginUserThunk } from "../app/thunks/auth"
 import { LOGIN_USER_PAYLOAD, SIGNUP_USER_PAYLOAD } from "../utils/types"
+import { Navigate, useNavigate } from "react-router"
 
 type LoginProps = {}
 
 const Login: React.FC<LoginProps> = () => {
   const [isLogin, setIsLogin] = useState(true)
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+  const { user } = useSelector((state: any) => state.auth)
+
+  if (user) return <Navigate to={"/"} />
 
   const {
     register,
@@ -21,10 +26,14 @@ const Login: React.FC<LoginProps> = () => {
 
   const registerUser: SubmitHandler<FieldValues> = (data) => {
     dispatch(signupUser(data as SIGNUP_USER_PAYLOAD))
+
+    navigate("/")
   }
 
   const loginUser: SubmitHandler<FieldValues> = (data) => {
     dispatch(loginUserThunk(data as LOGIN_USER_PAYLOAD))
+
+    navigate("/")
   }
 
   return (
