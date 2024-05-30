@@ -11,15 +11,12 @@ import { isAxiosError } from "../../utils/helper"
 const loginUser = createAsyncThunk<User, LOGIN_USER_PAYLOAD>(
   "auth/login",
   async (body, _) => {
-    console.log(body)
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_SERVER}/api/v1/user/login`,
         body,
         axiosConfig
       )
-
-      console.log(result.data)
 
       return result.data
     } catch (error) {

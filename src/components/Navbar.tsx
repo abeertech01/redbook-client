@@ -3,14 +3,16 @@ import { isAxiosError } from "../utils/helper"
 import axios from "axios"
 import { useDispatch } from "react-redux"
 import { userDoesntExist } from "../app/reducers/auth"
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import { AppDispatch } from "../app/store"
+import { Link } from "react-router-dom"
 
 type NavbarProps = {}
 
 const Navbar: React.FC<NavbarProps> = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const logout = async () => {
     try {
@@ -35,16 +37,25 @@ const Navbar: React.FC<NavbarProps> = () => {
   return (
     <div className="navbar bg-base-100 bg-gradient-to-r from-red-500 to-pink-500">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl text-white">daisyUI</a>
+        <Link to={"/"} className="btn btn-ghost text-xl text-white">
+          daisyUI
+        </Link>
       </div>
       <div className="flex-none gap-2">
-        <div className="form-control">
-          <input
-            type="text"
-            placeholder="Search"
-            className="input input-bordered w-24 md:w-auto bg-red-400 text-white placeholder-white"
-          />
-        </div>
+        {location.pathname !== "/chat" && (
+          <>
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="Search"
+                className="input input-bordered w-24 md:w-auto bg-red-400 text-white placeholder-white"
+              />
+            </div>
+            <Link to={"/chat"} className="btn btn-secondary text-white">
+              Chat
+            </Link>
+          </>
+        )}
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
