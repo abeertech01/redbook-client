@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { setLoader, setUser } from "./app/reducers/auth"
+import { userDoesntExist, userExists } from "./app/reducers/auth"
 import { AppDispatch, RootState } from "./app/store"
 import LayoutLoader from "./components/LayoutLoader"
 import ProtectedRoute from "./components/ProtectedRoute"
@@ -19,12 +19,11 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_SERVER}/api/v1/auth/profile`, {
+      .get(`${import.meta.env.VITE_SERVER}/api/v1/user/profile`, {
         withCredentials: true,
       })
-      .then(({ data }) => dispatch(setUser(data)))
-      .catch((_) => dispatch(setLoader(false)))
-      .finally(() => dispatch(setLoader(false)))
+      .then(({ data }) => dispatch(userExists(data.user)))
+      .catch((_) => dispatch(userDoesntExist()))
   }, [dispatch])
 
   return loader ? (

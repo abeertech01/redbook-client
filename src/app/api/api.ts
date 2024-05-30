@@ -11,7 +11,7 @@ const api = createApi({
   endpoints: (builder) => ({
     getProfile: builder.query<FetchedUser, void>({
       query: () => ({
-        url: "/auth/profile",
+        url: "/user/profile",
         credentials: "include",
       }),
       providesTags: ["Profile"],

@@ -1,20 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
 import {
-  AxiosError,
   LOGIN_USER_PAYLOAD,
   SIGNUP_USER_PAYLOAD,
   User,
 } from "../../utils/types"
 import { axiosConfig } from "../../constants/config"
-
-function isAxiosError(error: any): error is AxiosError {
-  return (
-    error.response &&
-    error.response.data &&
-    typeof error.response.data.message === "string"
-  )
-}
+import { isAxiosError } from "../../utils/helper"
 
 const loginUser = createAsyncThunk<User, LOGIN_USER_PAYLOAD>(
   "auth/login",
@@ -22,7 +14,7 @@ const loginUser = createAsyncThunk<User, LOGIN_USER_PAYLOAD>(
     console.log(body)
     try {
       const result = await axios.post(
-        `${import.meta.env.VITE_SERVER}/api/v1/auth/login`,
+        `${import.meta.env.VITE_SERVER}/api/v1/user/login`,
         body,
         axiosConfig
       )
@@ -47,7 +39,7 @@ const signupUser = createAsyncThunk<User, SIGNUP_USER_PAYLOAD>(
     try {
       console.log(body)
       const result = await axios.post(
-        `${import.meta.env.VITE_SERVER}/api/v1/auth/register`,
+        `${import.meta.env.VITE_SERVER}/api/v1/user/register`,
         body,
         axiosConfig
       )
