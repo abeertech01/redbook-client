@@ -1,34 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import axios from "axios"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { userDoesntExist, userExists } from "./app/reducers/auth"
+import { AppDispatch, RootState } from "./app/store"
+import LayoutLoader from "./components/LayoutLoader"
+import ProtectedRoute from "./components/ProtectedRoute"
+import Chat from "./pages/Chat"
+import Home from "./pages/Home"
+import Inbox from "./pages/Inbox"
+import Login from "./pages/Login"
+import Profile from "./pages/Profile"
+import { User } from "./utils/types"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch<AppDispatch>()
+  const { user, loader } = useSelector((state: RootState) => state.auth)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_SERVER}/api/v1/user/profile`, {
+        withCredentials: true,
+      })
+      .then(({ data }) => dispatch(userExists(data.user)))
+      .catch((_) => dispatch(userDoesntExist()))
+  }, [dispatch])
+
+  return loader ? (
+    <LayoutLoader />
+  ) : (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<ProtectedRoute user={user as User} />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/:username" element={<Profile />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:chatId" element={<Inbox />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
