@@ -38,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = () => {
     <div className="navbar bg-base-100 bg-gradient-to-r from-red-500 to-pink-500">
       <div className="flex-1">
         <Link to={"/"} className="btn btn-ghost text-xl text-white">
-          daisyUI
+          RedBook
         </Link>
       </div>
       <div className="flex-none gap-2">

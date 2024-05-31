@@ -1,23 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { FetchedUser } from "../../utils/types"
+import { FetchedChats, SearchedUsers } from "../../utils/types"
 
 const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER}/api/v1`,
   }),
-  tagTypes: ["Profile"],
+  tagTypes: ["Chats", "SearchUser"],
 
   endpoints: (builder) => ({
-    getProfile: builder.query<FetchedUser, void>({
+    getChats: builder.query<FetchedChats, void>({
       query: () => ({
-        url: "/user/profile",
+        url: "/chat/chats",
         credentials: "include",
       }),
-      providesTags: ["Profile"],
+      providesTags: ["Chats"],
+    }),
+    searchUsers: builder.query<SearchedUsers, string>({
+      query: (name = "") => ({
+        url: `/user/search?name=${name}`,
+        credentials: "include",
+      }),
+      providesTags: ["SearchUser"],
     }),
   }),
 })
 
 export { api }
-export const { useGetProfileQuery } = api
+export const { useGetChatsQuery, useSearchUsersQuery } = api

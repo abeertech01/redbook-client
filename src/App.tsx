@@ -27,7 +27,9 @@ function App() {
   }, [dispatch])
 
   return loader ? (
-    <LayoutLoader />
+    <div className="w-screen h-screen centering">
+      <LayoutLoader />
+    </div>
   ) : (
     <BrowserRouter>
       <Routes>
