@@ -1,13 +1,30 @@
 import React from "react"
 import { useSearchUsersQuery } from "../../app/api/api"
 import LayoutLoader from "../LayoutLoader"
+import clsx from "clsx"
+import { getSocket } from "../../socket"
+import { NEW_CHAT } from "../../constants/events"
 
 type SearchUserModalProps = {
   name: string
+  closeSearchUserModal: () => void
 }
 
-const SearchUserModal: React.FC<SearchUserModalProps> = ({ name }) => {
+const SearchUserModal: React.FC<SearchUserModalProps> = ({
+  name,
+  closeSearchUserModal,
+}) => {
+  const socket = getSocket()
   const { data, isLoading } = useSearchUsersQuery(name)
+
+  const createChat = async (participantId: string) => {
+    //Emitting the message to the server
+    socket?.emit(NEW_CHAT, {
+      participantId,
+    })
+
+    closeSearchUserModal()
+  }
 
   return isLoading ? (
     <div className="w-full h-full min-h-[3rem] centering">
@@ -19,7 +36,11 @@ const SearchUserModal: React.FC<SearchUserModalProps> = ({ name }) => {
         {data?.users?.map((user) => (
           <li
             key={user.id}
-            className="flex gap-2 items-center p-2 bg-red-500 rounded-md"
+            onClick={() => (isLoading ? undefined : createChat(user.id))}
+            className={clsx(
+              "flex gap-2 items-center p-2 bg-red-500 rounded-md",
+              isLoading ? "cursor-not-allowed" : "cursor-pointer"
+            )}
           >
             <div className="w-12 rounded-full">
               <img

@@ -7,6 +7,11 @@ export interface User {
   updatedAt: Date
 }
 
+export interface ProfileData {
+  success: boolean
+  user: User
+}
+
 export interface FetchedChats {
   success: boolean
   chats: [Chat]
@@ -18,6 +23,7 @@ export interface Chat {
   updatedAt: Date
   creatorId: string
   members: [User]
+  theOtherUserIndex: number
 }
 
 export interface SearchedUsers {
@@ -54,4 +60,8 @@ export interface AxiosError {
       message: string
     }
   }
+}
+
+export interface SocketEventHandler {
+  [key: string]: (...args: any) => void
 }

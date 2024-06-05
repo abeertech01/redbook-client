@@ -6,9 +6,16 @@ const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER}/api/v1`,
   }),
-  tagTypes: ["Chats", "SearchUser"],
+  tagTypes: ["Profile", "Chats", "SearchUser"],
 
   endpoints: (builder) => ({
+    getProfile: builder.query<any, void>({
+      query: () => ({
+        url: "/user/profile",
+        credentials: "include",
+      }),
+      providesTags: ["Profile"],
+    }),
     getChats: builder.query<FetchedChats, void>({
       query: () => ({
         url: "/chat/chats",
@@ -27,4 +34,4 @@ const api = createApi({
 })
 
 export { api }
-export const { useGetChatsQuery, useSearchUsersQuery } = api
+export const { useGetProfileQuery, useGetChatsQuery, useSearchUsersQuery } = api
