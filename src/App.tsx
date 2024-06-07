@@ -12,6 +12,7 @@ import Inbox from "./pages/Inbox"
 import Login from "./pages/Login"
 import Profile from "./pages/Profile"
 import { User } from "./utils/types"
+import { SocketProvider } from "./socket"
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -27,13 +28,21 @@ function App() {
   }, [dispatch])
 
   return loader ? (
-    <LayoutLoader />
+    <div className="w-screen h-screen centering">
+      <LayoutLoader />
+    </div>
   ) : (
     <BrowserRouter>
       <Routes>
-        <Route element={<ProtectedRoute user={user as User} />}>
+        <Route
+          element={
+            <SocketProvider>
+              <ProtectedRoute user={user as User} />
+            </SocketProvider>
+          }
+        >
           <Route path="/" element={<Home />} />
-          <Route path="/:username" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/chat/:chatId" element={<Inbox />} />
         </Route>

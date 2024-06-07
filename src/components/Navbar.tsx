@@ -38,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = () => {
     <div className="navbar bg-base-100 bg-gradient-to-r from-red-500 to-pink-500">
       <div className="flex-1">
         <Link to={"/"} className="btn btn-ghost text-xl text-white">
-          daisyUI
+          RedBook
         </Link>
       </div>
       <div className="flex-none gap-2">
@@ -74,10 +74,10 @@ const Navbar: React.FC<NavbarProps> = () => {
             className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content rounded-box w-52 bg-red-400 text-white"
           >
             <li>
-              <a className="justify-between">
+              <Link to={"/profile"} className="justify-between">
                 Profile
                 <span className="badge">New</span>
-              </a>
+              </Link>
             </li>
             {/* <li>
               <a>Settings</a>

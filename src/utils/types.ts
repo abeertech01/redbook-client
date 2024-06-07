@@ -7,10 +7,34 @@ export interface User {
   updatedAt: Date
 }
 
-export interface FetchedUser {
+export interface ProfileData {
   success: boolean
-  message: string
   user: User
+}
+
+export interface FetchedChats {
+  success: boolean
+  chats: [Chat]
+}
+
+export interface Chat {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  creatorId: string
+  members: [User]
+  theOtherUserIndex: number
+}
+
+export interface SearchedUsers {
+  success: boolean
+  users: [SearchedUser]
+}
+
+export interface SearchedUser {
+  id: string
+  name: string
+  username: string
 }
 
 export interface SIGNUP_USER_PAYLOAD {
@@ -36,4 +60,8 @@ export interface AxiosError {
       message: string
     }
   }
+}
+
+export interface SocketEventHandler {
+  [key: string]: (...args: any) => void
 }
