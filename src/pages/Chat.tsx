@@ -104,8 +104,13 @@ const Chat: React.FC<ChatProps> = () => {
             </ul>
           )}
         </div>
-        <div className="w-[50%]"></div>
-        <div className="w-[25%]"></div>
+
+        {/* Message section */}
+        <div className="w-[50%] grid grid-row-[auto_80px]">
+          <div></div>
+          <div className=""></div>
+        </div>
+        <div className="w-[25%] bg-[#171c22]"></div>
       </div>
     </div>
   )
