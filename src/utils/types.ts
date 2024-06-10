@@ -26,6 +26,19 @@ export interface Chat {
   theOtherUserIndex: number
 }
 
+export interface InboxMessage {
+  id: string
+  text: string
+  createdAt: Date
+  authorId: string
+  chatId: string
+}
+
+export interface MessagesData {
+  success: boolean
+  messages: [InboxMessage]
+}
+
 export interface SearchedUsers {
   success: boolean
   users: [SearchedUser]

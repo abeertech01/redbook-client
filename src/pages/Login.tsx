@@ -3,7 +3,7 @@ import logo from "../assets/RedBook.svg"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import clsx from "clsx"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch } from "../app/store"
+import { AppDispatch, RootState } from "../app/store"
 import { signupUser, loginUser as loginUserThunk } from "../app/thunks/auth"
 import { LOGIN_USER_PAYLOAD, SIGNUP_USER_PAYLOAD } from "../utils/types"
 import { Navigate, useNavigate } from "react-router"
@@ -14,7 +14,7 @@ const Login: React.FC<LoginProps> = () => {
   const [isLogin, setIsLogin] = useState(true)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const { user } = useSelector((state: any) => state.auth)
+  const { user } = useSelector((state: RootState) => state.auth)
 
   if (user) return <Navigate to={"/"} />
 
