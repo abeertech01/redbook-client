@@ -7,17 +7,27 @@ import LayoutLoader from "../components/LayoutLoader"
 import { useSocketEvents } from "../hooks/hook"
 import { NEW_CHAT } from "../constants/events"
 import { getSocket } from "../socket"
+import { Outlet, useLocation, useNavigate } from "react-router"
 
 type ChatProps = {}
 
 const Chat: React.FC<ChatProps> = () => {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
   const [userName, setUserName] = useState<string>("")
+  const [isInboxPage, setIsInboxPage] = useState(false)
+  const [inboxChatId, setInboxChatId] = useState("")
   const deferredNameQuery = useDebounce(userName, 500)
-  const { data, isError, isLoading, refetch } = useGetChatsQuery()
+  const { data, isError: _, isLoading, refetch } = useGetChatsQuery()
   const socket = getSocket()
 
   const inputUserName = (e: ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value)
+  }
+
+  const selectConversation = (chatId: string) => {
+    setInboxChatId(chatId)
+    navigate(`/chat/${chatId}`)
   }
 
   const closeSearchUserModal = () => {
@@ -27,6 +37,14 @@ const Chat: React.FC<ChatProps> = () => {
   useEffect(() => {
     refetch()
   }, [])
+
+  useEffect(() => {
+    if (pathname !== "/chat") {
+      setIsInboxPage(true)
+    } else {
+      setIsInboxPage(false)
+    }
+  }, [pathname, inboxChatId])
 
   const eventHandler = {
     [NEW_CHAT]: (_: string) => refetch(),
@@ -80,6 +98,7 @@ const Chat: React.FC<ChatProps> = () => {
               {data?.chats.map((chat) => (
                 <li
                   key={chat.id}
+                  onClick={() => selectConversation(chat.id)}
                   className="grid grid-cols-[3rem_auto] gap-x-4 p-2 mx-4 items-center hover:bg-[#252d37] hover:cursor-pointer [&:not(:first-child)]:mt-4 rounded-md"
                 >
                   <div className="w-12 rounded-full">
@@ -106,13 +125,21 @@ const Chat: React.FC<ChatProps> = () => {
         </div>
 
         {/* Message section */}
-        <div className="w-[50%] grid grid-row-[auto_80px]">
-          <div></div>
-          <div className=""></div>
+        <div className="w-[50%] h-[calc(100vh-66px)] flex flex-col">
+          <div className="w-full h-full text-2xl font-medium flex justify-center items-center">
+            {!isInboxPage && (
+              <h1 className="text-center">
+                Start A<br />
+                Conversation
+              </h1>
+            )}
+          </div>
+          <Outlet />
         </div>
         <div className="w-[25%] bg-[#171c22]"></div>
       </div>
     </div>
   )
 }
+
 export default Chat

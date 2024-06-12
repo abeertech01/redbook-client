@@ -3,12 +3,22 @@
 ## Table of Contents
 
 - [About the Project](#about-the-project)
+- [Technologies Used](#technologies-used)
 - [Features](#features)
 - [Getting Started](#getting-started)
 
 ## About the Project
 
 This project is a social media application built with React and TypeScript. It aims to incorporate key features inspired by popular platforms like Facebook and Reddit. While still under development, the app showcases some well-implemented features, with more to come as the project evolves.
+
+## Technologies Used
+
+- **TypeScript**
+- **React**
+- **Redux**
+- **RTK Query**
+- **Tailwind CSS**
+- **Daisy UI**
 
 ## Features
 

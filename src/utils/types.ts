@@ -7,6 +7,11 @@ export interface User {
   updatedAt: Date
 }
 
+export interface AuthResult {
+  sucess: boolean
+  user: User
+}
+
 export interface ProfileData {
   success: boolean
   user: User
@@ -24,6 +29,19 @@ export interface Chat {
   creatorId: string
   members: [User]
   theOtherUserIndex: number
+}
+
+export interface InboxMessage {
+  id: string
+  text: string
+  createdAt: Date
+  authorId: string
+  chatId: string
+}
+
+export interface MessagesData {
+  success: boolean
+  messages: [InboxMessage]
 }
 
 export interface SearchedUsers {
