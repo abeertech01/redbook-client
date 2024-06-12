@@ -7,6 +7,11 @@ export interface User {
   updatedAt: Date
 }
 
+export interface AuthResult {
+  sucess: boolean
+  user: User
+}
+
 export interface ProfileData {
   success: boolean
   user: User

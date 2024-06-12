@@ -1,14 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
 import {
+  AuthResult,
   LOGIN_USER_PAYLOAD,
   SIGNUP_USER_PAYLOAD,
-  User,
 } from "../../utils/types"
 import { axiosConfig } from "../../constants/config"
 import { isAxiosError } from "../../utils/helper"
 
-const loginUser = createAsyncThunk<User, LOGIN_USER_PAYLOAD>(
+const loginUser = createAsyncThunk<AuthResult, LOGIN_USER_PAYLOAD>(
   "auth/login",
   async (body, _) => {
     try {
@@ -17,6 +17,8 @@ const loginUser = createAsyncThunk<User, LOGIN_USER_PAYLOAD>(
         body,
         axiosConfig
       )
+
+      console.log(result.data)
 
       return result.data
     } catch (error) {
@@ -30,7 +32,7 @@ const loginUser = createAsyncThunk<User, LOGIN_USER_PAYLOAD>(
   }
 )
 
-const signupUser = createAsyncThunk<User, SIGNUP_USER_PAYLOAD>(
+const signupUser = createAsyncThunk<AuthResult, SIGNUP_USER_PAYLOAD>(
   "auth/signup",
   async (body, _) => {
     try {
