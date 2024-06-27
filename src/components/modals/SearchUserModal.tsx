@@ -31,14 +31,14 @@ const SearchUserModal: React.FC<SearchUserModalProps> = ({
       <LayoutLoader />
     </div>
   ) : (
-    <div className="absolute top-[105%] left-0 right-0 w-full shadow-lg p-2 rounded-lg bg-red-400 text-white">
+    <div className="absolute top-[105%] left-0 right-0 w-full shadow-lg p-2 rounded-lg bg-zinc-700 text-white">
       <ul className="flex flex-col gap-2">
         {data?.users?.map((user) => (
           <li
             key={user.id}
             onClick={() => (isLoading ? undefined : createChat(user.id))}
             className={clsx(
-              "flex gap-2 items-center p-2 bg-red-500 rounded-md",
+              "flex gap-2 items-center p-2 bg-zinc-600 rounded-md",
               isLoading ? "cursor-not-allowed" : "cursor-pointer"
             )}
           >

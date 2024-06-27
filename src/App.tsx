@@ -13,6 +13,7 @@ import Login from "./pages/Login"
 import Profile from "./pages/Profile"
 import { User } from "./utils/types"
 import { SocketProvider } from "./socket"
+import MarketPlace from "./pages/MarketPlace"
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -48,6 +49,7 @@ function App() {
           </Route>
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/marketplace" element={<MarketPlace />} />
       </Routes>
     </BrowserRouter>
   )

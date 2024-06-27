@@ -55,7 +55,7 @@ const Chat: React.FC<ChatProps> = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex h-[calc(100vh-66px)]">
+      <div className="flex h8-minus-navbar">
         <div className="w-[25%] bg-[#171c22]">
           <div className="relative m-4">
             <label className="relative input input-bordered flex items-center gap-2">

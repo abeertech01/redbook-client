@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   srchUserModalOpen: false,
+  postSearchBox: true,
 }
 
 const miscSlice = createSlice({
@@ -11,8 +12,12 @@ const miscSlice = createSlice({
     changeSrchUserModalOpen(state, action) {
       state.srchUserModalOpen = action.payload
     },
+    changePostSearchBox(state, action) {
+      state.postSearchBox = action.payload
+    },
   },
 })
 
 export default miscSlice
-export const { changeSrchUserModalOpen } = miscSlice.actions
+export const { changeSrchUserModalOpen, changePostSearchBox } =
+  miscSlice.actions

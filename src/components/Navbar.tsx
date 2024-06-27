@@ -42,16 +42,16 @@ const Navbar: React.FC<NavbarProps> = () => {
         </Link>
       </div>
       <div className="flex-none gap-2">
-        {location.pathname !== "/chat" && (
+        {!/\/chat/g.test(location.pathname) && (
           <>
             <div className="form-control">
               <input
                 type="text"
-                placeholder="Search"
-                className="input input-bordered w-24 md:w-auto bg-red-400 text-white placeholder-white"
+                placeholder="Search Posts"
+                className="input input-bordered w-24 md:w-auto bg-slate-50 text-black placeholder-slate-500"
               />
             </div>
-            <Link to={"/chat"} className="btn btn-secondary text-white">
+            <Link to={"/chat"} className="btn btn-[#ef4444] text-white">
               Chat
             </Link>
           </>
