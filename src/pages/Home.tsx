@@ -51,9 +51,6 @@ const Home: React.FC<HomeProps> = () => {
           >
             Write what's on your mind!
           </label>
-          {/* <button className="card bg-base-200 w-full text-left text-lg p-4 border-2 border-zinc-700 cursor-text mb-4">
-            Write what's on your mind!
-          </button> */}
 
           <ul className="flex flex-col gap-5">
             <div className="card bg-base-300 w-full shadow-sm z-20">
