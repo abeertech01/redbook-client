@@ -7,6 +7,7 @@ import downArrow from "../assets/icons/arrow-down-plain.png"
 import commentIcon from "../assets/icons/comment-plain.png"
 import shareIcon from "../assets/icons/share-plain.png"
 import { useNavigate } from "react-router"
+import CreatePostModal from "../components/modals/CreatePostModal"
 
 type HomeProps = {}
 
@@ -14,6 +15,7 @@ const Home: React.FC<HomeProps> = () => {
   const navigate = useNavigate()
   return (
     <div>
+      <CreatePostModal />
       <Navbar />
       <div className="_3cols">
         <div className="flex-1 h-full">
@@ -43,12 +45,18 @@ const Home: React.FC<HomeProps> = () => {
           </button> */}
         </div>
         <div className="mid-col">
-          <button className="card bg-base-200 w-full text-left text-lg p-4 border-2 border-zinc-700 cursor-text mb-4">
+          <label
+            htmlFor="my_modal_6"
+            className="card bg-base-200 w-full text-left text-lg p-4 border-2 border-zinc-700 cursor-text mb-4"
+          >
             Write what's on your mind!
-          </button>
+          </label>
+          {/* <button className="card bg-base-200 w-full text-left text-lg p-4 border-2 border-zinc-700 cursor-text mb-4">
+            Write what's on your mind!
+          </button> */}
 
           <ul className="flex flex-col gap-5">
-            <div className="card bg-base-300 w-full shadow-sm">
+            <div className="card bg-base-300 w-full shadow-sm z-20">
               <div className="card-body">
                 <div className="flex gap-2 items-center rounded-md mb-2">
                   <div className="w-12 rounded-full">
