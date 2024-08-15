@@ -14,6 +14,7 @@ import Profile from "./pages/Profile"
 import { User } from "./utils/types"
 import { SocketProvider } from "./socket"
 import MarketPlace from "./pages/MarketPlace"
+import AdDetails from "./components/AdDetails"
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -50,6 +51,7 @@ function App() {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/marketplace" element={<MarketPlace />} />
+        <Route path="/marketplace/:adId" element={<AdDetails />} />
       </Routes>
     </BrowserRouter>
   )

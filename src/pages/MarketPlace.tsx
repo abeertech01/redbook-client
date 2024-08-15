@@ -8,9 +8,9 @@ const MarketPlace: React.FC<MarketPlaceProps> = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex w-full h8-minus-navbar p-4">
+      <div className="_3cols">
         <div className="flex-1 w-full"></div>
-        <div className="w-[700px] h-full">
+        <div className="mid-col">
           <h1 className="mp-text-gradient text-3xl font-bold text-center mb-4">
             RedBook Marketplace
           </h1>

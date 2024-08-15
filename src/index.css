@@ -14,6 +14,14 @@
   @apply h-[calc(100vh-66px)];
 }
 
+._3cols {
+  @apply flex w-full h8-minus-navbar p-4;
+}
+
+.mid-col {
+  @apply w-[700px] h-full;
+}
+
 .mp-text-gradient {
   background: linear-gradient(90deg, #ef4445, #ec4898);
   -webkit-background-clip: text;

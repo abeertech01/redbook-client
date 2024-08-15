@@ -64,6 +64,7 @@ const Chat: React.FC<ChatProps> = () => {
                 className="grow"
                 placeholder="Search"
                 onChange={inputUserName}
+                onBlur={closeSearchUserModal}
                 value={userName}
               />
               <svg

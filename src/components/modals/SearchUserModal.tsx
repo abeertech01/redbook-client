@@ -50,9 +50,8 @@ const SearchUserModal: React.FC<SearchUserModalProps> = ({
               />
             </div>
             <div className="overflow-hidden">
-              <h1 className="text-[1.2rem]">
-                {user.name} @{user.username}
-              </h1>
+              <h1 className="text-[1.2rem]">{user.name}</h1>
+              <h3 className="text-[0.8rem] text-zinc-200">@{user.username}</h3>
             </div>
           </li>
         ))}
