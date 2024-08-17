@@ -1,17 +1,18 @@
-import React, { useCallback, useRef } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import Navbar from "../components/Navbar"
 // import cart from "../assets/shopping-cart.png"
 import profileAvatar from "../assets/icons/human-avatar.png"
 
 import { useNavigate } from "react-router"
-import CreatePostModal from "../components/modals/CreatePostModal"
 import PostCard from "../components/PostCard"
 import { useGetPostsQuery } from "../app/api/api"
 import { Button } from "react-daisyui"
+import CreatePostModal from "../components/modals/CreatePostModal"
 
 type HomeProps = {}
 
 const Home: React.FC<HomeProps> = () => {
+  const [CPModalOpen, setCPModalOpen] = useState(false)
   const {
     data: postsData,
     isLoading: _,
@@ -20,28 +21,21 @@ const Home: React.FC<HomeProps> = () => {
   } = useGetPostsQuery()
   const navigate = useNavigate()
 
-  const postRef = useRef<HTMLDialogElement>(null)
-
-  const handleShow = useCallback(() => {
-    postRef.current?.showModal()
-  }, [postRef])
-
-  const closeCreatePost = useCallback(() => {
-    postRef.current?.close()
-  }, [postRef])
-
-  const refetchPosts = () => {
-    refetch()
+  const toggleCreatePostModal = () => {
+    setCPModalOpen((prev) => !prev)
   }
+
+  const refetchPosts = () => refetch()
 
   return (
     <div>
       <Navbar />
-      <CreatePostModal
-        ref={postRef}
-        closeCreatePost={closeCreatePost}
-        refetchPosts={refetchPosts}
-      />
+      {CPModalOpen && (
+        <CreatePostModal
+          toggleCreatePostModal={toggleCreatePostModal}
+          refetchPosts={refetchPosts}
+        />
+      )}
       <div className="_3cols">
         <div className="flex-1 h-full">
           <button
@@ -71,12 +65,11 @@ const Home: React.FC<HomeProps> = () => {
         </div>
         <div className="mid-col">
           <Button
-            onClick={handleShow}
+            onClick={toggleCreatePostModal}
             className="bg-base-200 w-full flex justify-start text-lg border-2 border-zinc-700 cursor-text mb-4"
           >
             Write what's on your mind!
           </Button>
-          <label></label>
 
           <ul className="flex flex-col gap-5 pb-4">
             {postsData?.posts?.map((post) => (

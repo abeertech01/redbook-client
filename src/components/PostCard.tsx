@@ -6,6 +6,7 @@ import shareIcon from "../assets/icons/share-plain.png"
 import { Post } from "../utils/types"
 import { Button, Menu } from "react-daisyui"
 import { useDeletePostMutation } from "../app/api/api"
+import TimeAgo from "javascript-time-ago"
 
 type PostCardProps = {
   post: Post
@@ -16,13 +17,14 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const [menuOpen, setMenuOpen] = React.useState(false)
   const menuRef = useRef(null)
 
+  const timeAgo = new TimeAgo("en-US")
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen)
   }
 
-  // const deleteThisPost = () => {
-  //   console.log("Delete this post")
-  // }
+  // const postCreatedAt: any = new Date(post.createdAt)
+  const timeDiff = timeAgo.format(new Date(post.createdAt))
 
   return (
     <li className="card bg-base-300 w-full shadow-sm z-20">
@@ -39,7 +41,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             <div className="overflow-hidden">
               <h1 className="text-[1.2rem]">{post.author.name}</h1>
               <h3 className="text-[0.8rem]">
-                @{post.author.username} • 2h ago
+                @{post.author.username} • {timeDiff}
               </h3>
             </div>
           </div>
