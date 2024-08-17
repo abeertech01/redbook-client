@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { InitialStateType } from "../../utils/types"
+import { AuthInitialStateType } from "../../utils/types"
 import { loginUser, signupUser } from "../thunks/auth"
 
-const initialState: InitialStateType = {
+const initialState: AuthInitialStateType = {
   user: null,
   loader: true,
 }

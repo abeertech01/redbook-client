@@ -67,9 +67,13 @@ export interface LOGIN_USER_PAYLOAD {
   password: string
 }
 
-export interface InitialStateType {
+export interface AuthInitialStateType {
   user: User | null
   loader: boolean
+}
+
+export interface PostInitialStateType {
+  posts: [Post] | null
 }
 
 export interface AxiosError {
@@ -82,4 +86,26 @@ export interface AxiosError {
 
 export interface SocketEventHandler {
   [key: string]: (...args: any) => void
+}
+
+export interface Post {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  title: string
+  content: string
+  upvote: number
+  downvote: number
+  authorId: string
+  author: User
+}
+
+export interface FetchedPosts {
+  success: boolean
+  posts: [Post]
+}
+
+export interface CREATE_POST_INPUTS {
+  title: string
+  content: string
 }
