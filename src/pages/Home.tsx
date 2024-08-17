@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useState } from "react"
 import Navbar from "../components/Navbar"
 // import cart from "../assets/shopping-cart.png"
 import profileAvatar from "../assets/icons/human-avatar.png"
@@ -8,10 +8,13 @@ import PostCard from "../components/PostCard"
 import { useGetPostsQuery } from "../app/api/api"
 import { Button } from "react-daisyui"
 import CreatePostModal from "../components/modals/CreatePostModal"
+import { useSelector } from "react-redux"
+import { RootState } from "../app/store"
 
 type HomeProps = {}
 
 const Home: React.FC<HomeProps> = () => {
+  const { user } = useSelector((state: RootState) => state.auth)
   const [CPModalOpen, setCPModalOpen] = useState(false)
   const {
     data: postsData,
@@ -47,7 +50,7 @@ const Home: React.FC<HomeProps> = () => {
               alt="profile avatar"
               className="w-6 inline-block mr-2"
             />
-            Profile
+            {user?.name}
           </button>
 
           {/* Marketplace - will make it after completing posting */}
@@ -73,7 +76,7 @@ const Home: React.FC<HomeProps> = () => {
 
           <ul className="flex flex-col gap-5 pb-4">
             {postsData?.posts?.map((post) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post.id} post={post} userId={user?.id} />
             ))}
           </ul>
         </div>

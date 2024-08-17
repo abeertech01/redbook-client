@@ -57,7 +57,7 @@ const Profile: React.FC<ProfileProps> = () => {
 
         <hr className="mb-8 text-yellow-400 border-zinc-500" />
 
-        <UserPosts />
+        <UserPosts userId={data?.user?.id} />
       </div>
     </div>
   )

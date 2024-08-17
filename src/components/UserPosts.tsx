@@ -2,9 +2,11 @@ import React from "react"
 import { useGetUserPostsQuery } from "../app/api/api"
 import PostCard from "./PostCard"
 
-type UserPostsProps = {}
+type UserPostsProps = {
+  userId: string | undefined
+}
 
-const UserPosts: React.FC<UserPostsProps> = () => {
+const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
   const { data: postsData, isLoading: _, isError: __ } = useGetUserPostsQuery()
   return (
     <>
@@ -13,7 +15,7 @@ const UserPosts: React.FC<UserPostsProps> = () => {
       {/* Posts */}
       <ul className="flex flex-col gap-5">
         {postsData?.posts?.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.id} post={post} userId={userId} />
         ))}
       </ul>
     </>

@@ -10,10 +10,11 @@ import TimeAgo from "javascript-time-ago"
 
 type PostCardProps = {
   post: Post
+  userId: string | undefined
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation()
+const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
+  const [deletePost, { isLoading: _ }] = useDeletePostMutation()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const menuRef = useRef(null)
 
@@ -45,42 +46,44 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
               </h3>
             </div>
           </div>
-          <div className="relative flex flex-col items-end">
-            <Button onClick={toggleMenu} shape="circle" color="ghost">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                className="bi bi-three-dots-vertical"
-                viewBox="0 0 16 16"
-              >
-                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-              </svg>
-            </Button>
-            {menuOpen && (
-              <Menu
-                ref={menuRef}
-                className="absolute min-w-max bg-base-100 rounded-lg right-12"
-              >
-                <Menu.Item>
-                  <button onClick={() => deletePost(post.id)}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-trash-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                    </svg>
-                    Remove
-                  </button>
-                </Menu.Item>
-              </Menu>
-            )}
-          </div>
+          {post.authorId === userId && (
+            <div className="relative flex flex-col items-end">
+              <Button onClick={toggleMenu} shape="circle" color="ghost">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-three-dots-vertical"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                </svg>
+              </Button>
+              {menuOpen && (
+                <Menu
+                  ref={menuRef}
+                  className="absolute min-w-max bg-base-100 rounded-lg right-12"
+                >
+                  <Menu.Item>
+                    <button onClick={() => deletePost(post.id)}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-trash-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                      </svg>
+                      Remove
+                    </button>
+                  </Menu.Item>
+                </Menu>
+              )}
+            </div>
+          )}
         </div>
         <h2 className="card-title">{post.title}</h2>
         <p>
