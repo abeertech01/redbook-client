@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import {
   FetchedChats,
+  FetchedPosts,
   MessagesData,
   ProfileData,
   SearchedUsers,
@@ -11,7 +12,7 @@ const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER}/api/v1`,
   }),
-  tagTypes: ["Profile", "Chats", "SearchUser", "Messages"],
+  tagTypes: ["Profile", "Chats", "SearchUser", "Messages", "Posts"],
 
   endpoints: (builder) => ({
     getProfile: builder.query<ProfileData, void>({
@@ -42,6 +43,13 @@ const api = createApi({
       }),
       providesTags: ["Messages"],
     }),
+    getPosts: builder.query<FetchedPosts, void>({
+      query: () => ({
+        url: "/post/all-posts",
+        credentials: "include",
+      }),
+      providesTags: ["Posts"],
+    }),
   }),
 })
 
@@ -51,4 +59,5 @@ export const {
   useGetChatsQuery,
   useSearchUsersQuery,
   useGetMessagesQuery,
+  useGetPostsQuery,
 } = api

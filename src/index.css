@@ -9,3 +9,21 @@
 .message-style {
   @apply inline-block max-w-[70%] rounded-lg text-base bg-amber-200 text-black px-4 py-2;
 }
+
+.h8-minus-navbar {
+  @apply h-[calc(100vh-66px)];
+}
+
+._3cols {
+  @apply flex w-full h8-minus-navbar p-4;
+}
+
+.mid-col {
+  @apply w-[700px] h-full;
+}
+
+.mp-text-gradient {
+  background: linear-gradient(90deg, #ef4445, #ec4898);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
