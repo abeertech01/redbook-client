@@ -50,6 +50,21 @@ const api = createApi({
       }),
       providesTags: ["Posts"],
     }),
+    getUserPosts: builder.query<FetchedPosts, void>({
+      query: () => ({
+        url: `/post/user-posts`,
+        credentials: "include",
+      }),
+      providesTags: ["Posts"],
+    }),
+    deletePost: builder.mutation<void, string>({
+      query: (postId) => ({
+        url: `/post/delete-post/${postId}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Posts"],
+    }),
   }),
 })
 
@@ -60,4 +75,6 @@ export const {
   useSearchUsersQuery,
   useGetMessagesQuery,
   useGetPostsQuery,
+  useGetUserPostsQuery,
+  useDeletePostMutation,
 } = api

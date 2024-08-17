@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react"
+import { forwardRef } from "react"
 import { Button, Modal } from "react-daisyui"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { AppDispatch } from "../../app/store"
