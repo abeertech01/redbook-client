@@ -44,7 +44,7 @@ const Profile: React.FC<ProfileProps> = () => {
           </div>
 
           <div className="email">
-            <strong>Email:</strong> @{data?.user?.email}
+            <strong>Email:</strong> {data?.user?.email}
           </div>
 
           <div className="email">
