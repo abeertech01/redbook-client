@@ -7,7 +7,7 @@ import { Post } from "../utils/types"
 import { Button, Menu } from "react-daisyui"
 import { useDeletePostMutation } from "../app/api/api"
 import TimeAgo from "javascript-time-ago"
-import numbro from "numbro"
+import { formatNumber } from "../utils/helper"
 
 type PostCardProps = {
   post: Post
@@ -100,12 +100,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
             <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
               <button className="flex gap-1 text-[0.9rem]">
                 <img src={upArrow} alt="" className="h-[20px] inline-block" />
-                {numbro(post.upvote).format({ average: true })}
+                {formatNumber(post.upvoteIds.length)}
               </button>
               |
               <button className="flex gap-1 text-[0.9rem]">
                 <img src={downArrow} alt="" className="h-[20px] inline-block" />
-                {numbro(post.downvote).format({ average: true })}
+                {formatNumber(post.downvoteIds.length)}
               </button>
             </span>
             <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">

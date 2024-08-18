@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Button, Input, Textarea } from "react-daisyui"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { useDispatch } from "react-redux"
@@ -19,14 +19,23 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors: inputErr },
+    formState: { errors: _ },
   } = useForm()
 
   const onSubmit: SubmitHandler<FieldValues> = (formData) => {
     dispatch(createPostThunk(formData as CREATE_POST_INPUTS))
     toggleCreatePostModal()
-    refetchPosts()
   }
+
+  useEffect(() => {
+    return () => refetchPosts()
+  }, [])
+
+  /**
+   * FIXME:
+   * problem: content field styling doesn't appear on chrome and firefox as well.
+   * problem: in chrome refetch doesn't work.
+   */
 
   return (
     <div className="fixed z-[100] top-0 left-0 right-0 bottom-0 bg-[#000000cf] centering">

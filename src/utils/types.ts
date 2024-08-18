@@ -94,8 +94,8 @@ export interface Post {
   updatedAt: Date
   title: string
   content: string
-  upvote: number
-  downvote: number
+  upvoteIds: [string]
+  downvoteIds: [string]
   authorId: string
   author: User
 }
