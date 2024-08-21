@@ -2,10 +2,12 @@ import { configureStore } from "@reduxjs/toolkit"
 import { api } from "./api/api"
 import authSlice from "./reducers/auth"
 import miscSlice from "./reducers/misc"
+import postSlice from "./reducers/post"
 
 const store = configureStore({
   reducer: {
     [authSlice.name]: authSlice.reducer,
+    [postSlice.name]: postSlice.reducer,
     [miscSlice.name]: miscSlice.reducer,
     [api.reducerPath]: api.reducer,
   },

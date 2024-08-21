@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createPost } from "../thunks/post"
+import { downvotePost, upvotePost } from "../thunks/post"
 import { PostInitialStateType } from "../../utils/types"
 
 const initialState: PostInitialStateType = {
   posts: null,
 }
 
-const authSlice = createSlice({
+const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
@@ -21,10 +21,26 @@ const authSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    builder.addCase(createPost.fulfilled, (state, action) => {
-      state.posts = action.payload.posts
-    })
+    builder
+      .addCase(upvotePost.fulfilled, (state, action) => {
+        const targetPostIndex = state.posts?.findIndex(
+          (post) => post.id === action.payload.post.id
+        )
+
+        if (targetPostIndex !== -1) {
+          state.posts![targetPostIndex as number] = action.payload.post
+        }
+      })
+      .addCase(downvotePost.fulfilled, (state, action) => {
+        const targetPostIndex = state.posts?.findIndex(
+          (post) => post.id === action.payload.post.id
+        )
+
+        if (targetPostIndex !== -1) {
+          state.posts![targetPostIndex as number] = action.payload.post
+        }
+      })
   },
 })
 
-export default authSlice
+export default postSlice

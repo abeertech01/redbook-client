@@ -16,28 +16,18 @@ type HomeProps = {}
 const Home: React.FC<HomeProps> = () => {
   const { user } = useSelector((state: RootState) => state.auth)
   const [CPModalOpen, setCPModalOpen] = useState(false)
-  const {
-    data: postsData,
-    isLoading: _,
-    isError: __,
-    refetch,
-  } = useGetPostsQuery()
+  const { data: postsData, isLoading: _, isError: __ } = useGetPostsQuery()
   const navigate = useNavigate()
 
   const toggleCreatePostModal = () => {
     setCPModalOpen((prev) => !prev)
   }
 
-  const refetchPosts = () => refetch()
-
   return (
     <div>
       <Navbar />
       {CPModalOpen && (
-        <CreatePostModal
-          toggleCreatePostModal={toggleCreatePostModal}
-          refetchPosts={refetchPosts}
-        />
+        <CreatePostModal toggleCreatePostModal={toggleCreatePostModal} />
       )}
       <div className="_3cols">
         <div className="flex-1 h-full">

@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import {
+  CREATE_POST_REQ_BODY,
   FetchedChats,
+  FetchedPostResponse,
   FetchedPosts,
   MessagesData,
   ProfileData,
@@ -43,6 +45,7 @@ const api = createApi({
       }),
       providesTags: ["Messages"],
     }),
+
     getPosts: builder.query<FetchedPosts, void>({
       query: () => ({
         url: "/post/all-posts",
@@ -50,12 +53,20 @@ const api = createApi({
       }),
       providesTags: ["Posts"],
     }),
-    getUserPosts: builder.query<FetchedPosts, void>({
-      query: () => ({
-        url: `/post/user-posts`,
+    getUserPosts: builder.query<FetchedPosts, string>({
+      query: (authorId) => ({
+        url: `/post/all-posts?authorId=${authorId}`,
         credentials: "include",
       }),
-      providesTags: ["Posts"],
+    }),
+    createPost: builder.mutation<FetchedPostResponse, CREATE_POST_REQ_BODY>({
+      query: (newPost) => ({
+        url: "/post/create-post",
+        method: "POST",
+        body: newPost,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Posts"],
     }),
     deletePost: builder.mutation<void, string>({
       query: (postId) => ({
@@ -76,5 +87,6 @@ export const {
   useGetMessagesQuery,
   useGetPostsQuery,
   useGetUserPostsQuery,
+  useCreatePostMutation,
   useDeletePostMutation,
 } = api

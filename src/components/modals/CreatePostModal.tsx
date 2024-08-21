@@ -1,35 +1,33 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Button, Input, Textarea } from "react-daisyui"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
-import { useDispatch } from "react-redux"
-import { AppDispatch } from "../../app/store"
-import { createPost as createPostThunk } from "../../app/thunks/post"
-import { CREATE_POST_INPUTS } from "../../utils/types"
+import { useCreatePostMutation } from "../../app/api/api"
+import { useSelector } from "react-redux"
+import { RootState } from "../../app/store"
+import { CREATE_POST_REQ_BODY } from "../../utils/types"
 
 type CreatePostModalProps = {
   toggleCreatePostModal: () => void
-  refetchPosts: () => void
 }
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({
   toggleCreatePostModal,
-  refetchPosts,
 }) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const { user } = useSelector((state: RootState) => state.auth)
+  const [createPost] = useCreatePostMutation()
   const {
     register,
     handleSubmit,
     formState: { errors: _ },
   } = useForm()
 
-  const onSubmit: SubmitHandler<FieldValues> = (formData) => {
-    dispatch(createPostThunk(formData as CREATE_POST_INPUTS))
+  const onSubmit: SubmitHandler<FieldValues> = async (formData) => {
+    await createPost({
+      ...formData,
+      authorId: user?.id,
+    } as CREATE_POST_REQ_BODY).unwrap()
     toggleCreatePostModal()
   }
-
-  useEffect(() => {
-    return () => refetchPosts()
-  }, [])
 
   /**
    * FIXME:

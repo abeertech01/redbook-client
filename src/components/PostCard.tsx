@@ -8,6 +8,12 @@ import { Button, Menu } from "react-daisyui"
 import { useDeletePostMutation } from "../app/api/api"
 import TimeAgo from "javascript-time-ago"
 import { formatNumber } from "../utils/helper"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../app/store"
+import {
+  downvotePost as downvotePostThunk,
+  upvotePost as upvotePostThunk,
+} from "../app/thunks/post"
 
 type PostCardProps = {
   post: Post
@@ -15,6 +21,7 @@ type PostCardProps = {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [deletePost, { isLoading: _ }] = useDeletePostMutation()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const menuRef = useRef(null)
@@ -25,8 +32,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
     setMenuOpen(!menuOpen)
   }
 
-  // const postCreatedAt: any = new Date(post.createdAt)
   const timeDiff = timeAgo.format(new Date(post.createdAt))
+
+  const upvoteThisPost = () => {
+    console.log("upvoted")
+    dispatch(upvotePostThunk({ id: post.id }))
+  }
+
+  const downvoteThisPost = () => {
+    console.log("downvoted")
+    dispatch(downvotePostThunk({ id: post.id }))
+  }
 
   return (
     <li className="card bg-base-300 w-full shadow-sm z-20">
@@ -98,12 +114,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
         <div className="card-actions mt-2">
           <div className="flex justify-center items-center space-x-4">
             <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
-              <button className="flex gap-1 text-[0.9rem]">
+              <button
+                onClick={upvoteThisPost}
+                className="flex gap-1 text-[0.9rem]"
+              >
                 <img src={upArrow} alt="" className="h-[20px] inline-block" />
                 {formatNumber(post.upvoteIds.length)}
               </button>
               |
-              <button className="flex gap-1 text-[0.9rem]">
+              <button
+                onClick={downvoteThisPost}
+                className="flex gap-1 text-[0.9rem]"
+              >
                 <img src={downArrow} alt="" className="h-[20px] inline-block" />
                 {formatNumber(post.downvoteIds.length)}
               </button>
