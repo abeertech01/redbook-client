@@ -5,15 +5,16 @@ import commentIcon from "../assets/icons/comment-plain.png"
 import shareIcon from "../assets/icons/share-plain.png"
 import { Post } from "../utils/types"
 import { Button, Menu } from "react-daisyui"
-import { useDeletePostMutation } from "../app/api/api"
+import {
+  useDeletePostMutation,
+  useDownvotePostMutation,
+  useUpvotePostMutation,
+} from "../app/api/api"
 import TimeAgo from "javascript-time-ago"
 import { formatNumber } from "../utils/helper"
-import { useDispatch } from "react-redux"
-import { AppDispatch } from "../app/store"
-import {
-  downvotePost as downvotePostThunk,
-  upvotePost as upvotePostThunk,
-} from "../app/thunks/post"
+import clsx from "clsx"
+import { useSelector } from "react-redux"
+import { RootState } from "../app/store"
 
 type PostCardProps = {
   post: Post
@@ -21,8 +22,10 @@ type PostCardProps = {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const { user } = useSelector((state: RootState) => state.auth)
   const [deletePost, { isLoading: _ }] = useDeletePostMutation()
+  const [upvotePost, { isLoading: upvoting }] = useUpvotePostMutation()
+  const [downvotePost, { isLoading: downvoting }] = useDownvotePostMutation()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const menuRef = useRef(null)
 
@@ -34,14 +37,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
 
   const timeDiff = timeAgo.format(new Date(post.createdAt))
 
-  const upvoteThisPost = () => {
+  const upvoteThisPost = async () => {
     console.log("upvoted")
-    dispatch(upvotePostThunk({ id: post.id }))
+    await upvotePost(post.id)
   }
 
-  const downvoteThisPost = () => {
+  const downvoteThisPost = async () => {
     console.log("downvoted")
-    dispatch(downvotePostThunk({ id: post.id }))
+    await downvotePost(post.id)
   }
 
   return (
@@ -113,10 +116,15 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
         </p>
         <div className="card-actions mt-2">
           <div className="flex justify-center items-center space-x-4">
-            <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
+            <span className="flex justify-between gap-1 items-center bg-gray-800 text-white rounded-full px-2 py-1">
               <button
                 onClick={upvoteThisPost}
-                className="flex gap-1 text-[0.9rem]"
+                disabled={upvoting}
+                className={clsx(
+                  "flex gap-1 text-[0.9rem] px-2 py-1 rounded-xl",
+                  post.upvoteIds.includes(user?.id as string) &&
+                    "bg-[#eaeaea27] shadow-sm shadow-[#eaeaea42]"
+                )}
               >
                 <img src={upArrow} alt="" className="h-[20px] inline-block" />
                 {formatNumber(post.upvoteIds.length)}
@@ -124,7 +132,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
               |
               <button
                 onClick={downvoteThisPost}
-                className="flex gap-1 text-[0.9rem]"
+                disabled={downvoting}
+                className={clsx(
+                  "flex gap-1 text-[0.9rem] px-2 py-1 rounded-xl",
+                  post.downvoteIds.includes(user?.id as string) &&
+                    "bg-[#eaeaea27] shadow-sm shadow-[#eaeaea42]"
+                )}
               >
                 <img src={downArrow} alt="" className="h-[20px] inline-block" />
                 {formatNumber(post.downvoteIds.length)}

@@ -4,10 +4,12 @@ import {
   FetchedChats,
   FetchedPostResponse,
   FetchedPosts,
+  FetchedVotedPost,
   MessagesData,
   ProfileData,
   SearchedUsers,
 } from "../../utils/types"
+import { RootState } from "../store"
 
 const api = createApi({
   reducerPath: "api",
@@ -59,6 +61,14 @@ const api = createApi({
         credentials: "include",
       }),
     }),
+    /**
+     * FIXME:
+     * createPost invalidates posts.
+     * This can be a bad idea if there is a huge number of useers.
+     * optimistic update is a good way
+     * But it's not working for some reason.
+     * HINT: manually place the created post in the first place of news feed. (not sure, optional)
+     */
     createPost: builder.mutation<FetchedPostResponse, CREATE_POST_REQ_BODY>({
       query: (newPost) => ({
         url: "/post/create-post",
@@ -68,6 +78,9 @@ const api = createApi({
       }),
       invalidatesTags: ["Posts"],
     }),
+    /**
+     * FIXME: same as createPost
+     */
     deletePost: builder.mutation<void, string>({
       query: (postId) => ({
         url: `/post/delete-post/${postId}`,
@@ -75,6 +88,90 @@ const api = createApi({
         credentials: "include",
       }),
       invalidatesTags: ["Posts"],
+    }),
+    upvotePost: builder.mutation<FetchedVotedPost, string>({
+      query: (postId) => ({
+        url: `/post/upvote/${postId}`,
+        method: "PUT",
+        credentials: "include",
+      }),
+      async onQueryStarted(postId, { dispatch, queryFulfilled, getState }) {
+        const state = getState() as RootState
+        const authorId = state.auth.user?.id as string
+
+        const patchResult = dispatch(
+          api.util.updateQueryData("getPosts", undefined, (draft) => {
+            const postIndex = draft.posts.findIndex(
+              (post) => post.id === postId
+            )
+            if (postIndex !== -1) {
+              if (!draft.posts[postIndex].upvoteIds.includes(authorId)) {
+                draft.posts[postIndex].upvoteIds.push(authorId)
+
+                if (draft.posts[postIndex].downvoteIds.includes(authorId)) {
+                  draft.posts[postIndex].downvoteIds.splice(
+                    draft.posts[postIndex].downvoteIds.indexOf(authorId),
+                    1
+                  )
+                }
+              } else {
+                draft.posts[postIndex].upvoteIds.splice(
+                  draft.posts[postIndex].upvoteIds.indexOf(authorId),
+                  1
+                )
+              }
+            }
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
+    }),
+    downvotePost: builder.mutation<FetchedVotedPost, string>({
+      query: (authorId) => ({
+        url: `/post/downvote/${authorId}`,
+        method: "PUT",
+        credentials: "include",
+      }),
+      async onQueryStarted(postId, { dispatch, queryFulfilled, getState }) {
+        const state = getState() as RootState
+        const authorId = state.auth.user?.id as string
+
+        const patchResult = dispatch(
+          api.util.updateQueryData("getPosts", undefined, (draft) => {
+            const postIndex = draft.posts.findIndex(
+              (post) => post.id === postId
+            )
+            if (postIndex !== -1) {
+              if (!draft.posts[postIndex].downvoteIds.includes(authorId)) {
+                draft.posts[postIndex].downvoteIds.push(authorId)
+
+                if (draft.posts[postIndex].upvoteIds.includes(authorId)) {
+                  draft.posts[postIndex].upvoteIds.splice(
+                    draft.posts[postIndex].upvoteIds.indexOf(authorId),
+                    1
+                  )
+                }
+              } else {
+                draft.posts[postIndex].downvoteIds.splice(
+                  draft.posts[postIndex].downvoteIds.indexOf(authorId),
+                  1
+                )
+              }
+            }
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          patchResult.undo()
+        }
+      },
     }),
   }),
 })
@@ -89,4 +186,6 @@ export const {
   useGetUserPostsQuery,
   useCreatePostMutation,
   useDeletePostMutation,
+  useUpvotePostMutation,
+  useDownvotePostMutation,
 } = api
