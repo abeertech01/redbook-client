@@ -13,8 +13,6 @@ import {
 import TimeAgo from "javascript-time-ago"
 import { formatNumber } from "../utils/helper"
 import clsx from "clsx"
-import { useSelector } from "react-redux"
-import { RootState } from "../app/store"
 
 type PostCardProps = {
   post: Post
@@ -22,7 +20,6 @@ type PostCardProps = {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
-  const { user } = useSelector((state: RootState) => state.auth)
   const [deletePost, { isLoading: _ }] = useDeletePostMutation()
   const [upvotePost, { isLoading: upvoting }] = useUpvotePostMutation()
   const [downvotePost, { isLoading: downvoting }] = useDownvotePostMutation()
@@ -122,7 +119,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
                 disabled={upvoting}
                 className={clsx(
                   "flex gap-1 text-[0.9rem] px-2 py-1 rounded-xl",
-                  post.upvoteIds.includes(user?.id as string) &&
+                  post.upvoteIds.includes(userId as string) &&
                     "bg-[#eaeaea27] shadow-sm shadow-[#eaeaea42]"
                 )}
               >
@@ -135,7 +132,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
                 disabled={downvoting}
                 className={clsx(
                   "flex gap-1 text-[0.9rem] px-2 py-1 rounded-xl",
-                  post.downvoteIds.includes(user?.id as string) &&
+                  post.downvoteIds.includes(userId as string) &&
                     "bg-[#eaeaea27] shadow-sm shadow-[#eaeaea42]"
                 )}
               >

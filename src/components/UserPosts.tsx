@@ -1,6 +1,7 @@
 import React from "react"
 import { useGetUserPostsQuery } from "../app/api/api"
-import PostCard from "./PostCard"
+import Posts from "./Posts"
+import { Post } from "../utils/types"
 
 type UserPostsProps = {
   userId: string | undefined
@@ -14,14 +15,7 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
   } = useGetUserPostsQuery(userId as string)
   return (
     <>
-      <h1 className="text-[1.4rem] font-bold mb-4 underline">Posts</h1>
-
-      {/* Posts */}
-      <ul className="flex flex-col gap-5">
-        {postsData?.posts?.map((post) => (
-          <PostCard key={post.id} post={post} userId={userId} />
-        ))}
-      </ul>
+      <Posts posts={postsData?.posts as Post[]} userId={userId as string} />
     </>
   )
 }

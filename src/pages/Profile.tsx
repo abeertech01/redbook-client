@@ -6,7 +6,7 @@ import UserPosts from "../components/UserPosts"
 type ProfileProps = {}
 
 const Profile: React.FC<ProfileProps> = () => {
-  const { data, isLoading, isError, refetch } = useGetProfileQuery()
+  const { data, isLoading: _, isError: __, refetch } = useGetProfileQuery()
 
   useEffect(() => {
     refetch()
@@ -57,6 +57,7 @@ const Profile: React.FC<ProfileProps> = () => {
 
         <hr className="mb-8 text-yellow-400 border-zinc-500" />
 
+        <h1 className="text-[1.4rem] font-bold mb-4 underline">Posts</h1>
         <UserPosts userId={data?.user?.id} />
       </div>
     </div>

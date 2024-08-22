@@ -10,13 +10,21 @@ import {
   SearchedUsers,
 } from "../../utils/types"
 import { RootState } from "../store"
+import { downvoteHelper, upvoteHelper } from "../../utils/helper"
 
 const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER}/api/v1`,
   }),
-  tagTypes: ["Profile", "Chats", "SearchUser", "Messages", "Posts"],
+  tagTypes: [
+    "Profile",
+    "Chats",
+    "SearchUser",
+    "Messages",
+    "Posts",
+    "UserPosts",
+  ],
 
   endpoints: (builder) => ({
     getProfile: builder.query<ProfileData, void>({
@@ -51,15 +59,18 @@ const api = createApi({
     getPosts: builder.query<FetchedPosts, void>({
       query: () => ({
         url: "/post/all-posts",
+        method: "GET",
         credentials: "include",
       }),
       providesTags: ["Posts"],
     }),
     getUserPosts: builder.query<FetchedPosts, string>({
       query: (authorId) => ({
-        url: `/post/all-posts?authorId=${authorId}`,
+        url: `/post/user-posts/${authorId}`,
+        method: "GET",
         credentials: "include",
       }),
+      providesTags: ["UserPosts"],
     }),
     /**
      * FIXME:
@@ -99,35 +110,31 @@ const api = createApi({
         const state = getState() as RootState
         const authorId = state.auth.user?.id as string
 
-        const patchResult = dispatch(
+        const patchGetPosts = dispatch(
           api.util.updateQueryData("getPosts", undefined, (draft) => {
             const postIndex = draft.posts.findIndex(
               (post) => post.id === postId
             )
-            if (postIndex !== -1) {
-              if (!draft.posts[postIndex].upvoteIds.includes(authorId)) {
-                draft.posts[postIndex].upvoteIds.push(authorId)
+            // upvote helper
+            upvoteHelper(draft, postIndex, authorId)
+          })
+        )
 
-                if (draft.posts[postIndex].downvoteIds.includes(authorId)) {
-                  draft.posts[postIndex].downvoteIds.splice(
-                    draft.posts[postIndex].downvoteIds.indexOf(authorId),
-                    1
-                  )
-                }
-              } else {
-                draft.posts[postIndex].upvoteIds.splice(
-                  draft.posts[postIndex].upvoteIds.indexOf(authorId),
-                  1
-                )
-              }
-            }
+        const patchGetUserPosts = dispatch(
+          api.util.updateQueryData("getUserPosts", authorId, (draft) => {
+            const postIndex = draft.posts.findIndex(
+              (post) => post.id === postId
+            )
+            // upvote helper
+            upvoteHelper(draft, postIndex, authorId)
           })
         )
 
         try {
           await queryFulfilled
         } catch (error) {
-          patchResult.undo()
+          patchGetPosts.undo()
+          patchGetUserPosts.undo()
         }
       },
     }),
@@ -141,35 +148,30 @@ const api = createApi({
         const state = getState() as RootState
         const authorId = state.auth.user?.id as string
 
-        const patchResult = dispatch(
+        const patchGetPosts = dispatch(
           api.util.updateQueryData("getPosts", undefined, (draft) => {
             const postIndex = draft.posts.findIndex(
               (post) => post.id === postId
             )
-            if (postIndex !== -1) {
-              if (!draft.posts[postIndex].downvoteIds.includes(authorId)) {
-                draft.posts[postIndex].downvoteIds.push(authorId)
-
-                if (draft.posts[postIndex].upvoteIds.includes(authorId)) {
-                  draft.posts[postIndex].upvoteIds.splice(
-                    draft.posts[postIndex].upvoteIds.indexOf(authorId),
-                    1
-                  )
-                }
-              } else {
-                draft.posts[postIndex].downvoteIds.splice(
-                  draft.posts[postIndex].downvoteIds.indexOf(authorId),
-                  1
-                )
-              }
-            }
+            // downvote helper
+            downvoteHelper(draft, postIndex, authorId)
+          })
+        )
+        const patchGetUserPosts = dispatch(
+          api.util.updateQueryData("getUserPosts", authorId, (draft) => {
+            const postIndex = draft.posts.findIndex(
+              (post) => post.id === postId
+            )
+            // downvote helper
+            downvoteHelper(draft, postIndex, authorId)
           })
         )
 
         try {
           await queryFulfilled
         } catch (error) {
-          patchResult.undo()
+          patchGetPosts.undo()
+          patchGetUserPosts.undo()
         }
       },
     }),

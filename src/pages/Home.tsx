@@ -4,12 +4,13 @@ import Navbar from "../components/Navbar"
 import profileAvatar from "../assets/icons/human-avatar.png"
 
 import { useNavigate } from "react-router"
-import PostCard from "../components/PostCard"
 import { useGetPostsQuery } from "../app/api/api"
 import { Button } from "react-daisyui"
 import CreatePostModal from "../components/modals/CreatePostModal"
 import { useSelector } from "react-redux"
 import { RootState } from "../app/store"
+import Posts from "../components/Posts"
+import { Post } from "../utils/types"
 
 type HomeProps = {}
 
@@ -64,11 +65,16 @@ const Home: React.FC<HomeProps> = () => {
             Write what's on your mind!
           </Button>
 
-          <ul className="flex flex-col gap-5 pb-4">
+          <Posts
+            posts={postsData?.posts as Post[]}
+            userId={user?.id as string}
+          />
+
+          {/* <ul className="flex flex-col gap-5 pb-4">
             {postsData?.posts?.map((post) => (
               <PostCard key={post.id} post={post} userId={user?.id} />
             ))}
-          </ul>
+          </ul> */}
         </div>
         <div className="flex-1 h-full"></div>
       </div>

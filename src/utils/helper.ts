@@ -1,5 +1,5 @@
 import numbro from "numbro"
-import { AxiosError } from "./types"
+import { AxiosError, FetchedPosts } from "./types"
 
 function isAxiosError(error: any): error is AxiosError {
   return (
@@ -46,4 +46,52 @@ const formatNumber = (value: number): string => {
   })
 }
 
-export { isAxiosError, formatNumber }
+const upvoteHelper = (
+  draft: FetchedPosts,
+  postIndex: number,
+  authorId: string
+) => {
+  if (postIndex !== -1) {
+    if (!draft.posts[postIndex].upvoteIds.includes(authorId)) {
+      draft.posts[postIndex].upvoteIds.push(authorId)
+
+      if (draft.posts[postIndex].downvoteIds.includes(authorId)) {
+        draft.posts[postIndex].downvoteIds.splice(
+          draft.posts[postIndex].downvoteIds.indexOf(authorId),
+          1
+        )
+      }
+    } else {
+      draft.posts[postIndex].upvoteIds.splice(
+        draft.posts[postIndex].upvoteIds.indexOf(authorId),
+        1
+      )
+    }
+  }
+}
+
+const downvoteHelper = (
+  draft: FetchedPosts,
+  postIndex: number,
+  authorId: string
+) => {
+  if (postIndex !== -1) {
+    if (!draft.posts[postIndex].downvoteIds.includes(authorId)) {
+      draft.posts[postIndex].downvoteIds.push(authorId)
+
+      if (draft.posts[postIndex].upvoteIds.includes(authorId)) {
+        draft.posts[postIndex].upvoteIds.splice(
+          draft.posts[postIndex].upvoteIds.indexOf(authorId),
+          1
+        )
+      }
+    } else {
+      draft.posts[postIndex].downvoteIds.splice(
+        draft.posts[postIndex].downvoteIds.indexOf(authorId),
+        1
+      )
+    }
+  }
+}
+
+export { isAxiosError, formatNumber, upvoteHelper, downvoteHelper }
