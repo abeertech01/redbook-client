@@ -13,6 +13,7 @@ import {
 import TimeAgo from "javascript-time-ago"
 import { formatNumber } from "../utils/helper"
 import clsx from "clsx"
+import { useNavigate } from "react-router"
 
 type PostCardProps = {
   post: Post
@@ -20,6 +21,7 @@ type PostCardProps = {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
+  const navigate = useNavigate()
   const [deletePost, { isLoading: _ }] = useDeletePostMutation()
   const [upvotePost, { isLoading: upvoting }] = useUpvotePostMutation()
   const [downvotePost, { isLoading: downvoting }] = useDownvotePostMutation()
@@ -171,7 +173,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
               </button>
             </span>
             <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
-              <button className="flex items-center gap-2 text-[0.9rem]">
+              <button
+                onClick={() => navigate(`/post/${post.id}`)}
+                className="flex items-center gap-2 text-[0.9rem]"
+              >
                 <img
                   src={commentIcon}
                   alt=""

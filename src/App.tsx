@@ -15,6 +15,7 @@ import { User } from "./utils/types"
 import { SocketProvider } from "./socket"
 import MarketPlace from "./pages/MarketPlace"
 import AdDetails from "./components/AdDetails"
+import Post from "./pages/Post"
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -44,6 +45,7 @@ function App() {
           }
         >
           <Route path="/" element={<Home />} />
+          <Route path="/post/:id" element={<Post />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/chat" element={<Chat />}>
             <Route path=":chatId" element={<Inbox />} />

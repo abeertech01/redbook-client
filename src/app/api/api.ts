@@ -22,6 +22,7 @@ const api = createApi({
     "Chats",
     "SearchUser",
     "Messages",
+    "Post",
     "Posts",
     "UserPosts",
   ],
@@ -71,6 +72,14 @@ const api = createApi({
         credentials: "include",
       }),
       providesTags: ["UserPosts"],
+    }),
+    getPost: builder.query<FetchedPostResponse, string>({
+      query: (postId) => ({
+        url: `/post/get-post/${postId}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Post"],
     }),
     /**
      * FIXME:
@@ -186,6 +195,7 @@ export const {
   useGetMessagesQuery,
   useGetPostsQuery,
   useGetUserPostsQuery,
+  useGetPostQuery,
   useCreatePostMutation,
   useDeletePostMutation,
   useUpvotePostMutation,
