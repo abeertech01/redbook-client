@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import upArrow from "../assets/icons/arrow-up-plain.png"
 import downArrow from "../assets/icons/arrow-down-plain.png"
 import commentIcon from "../assets/icons/comment-plain.png"
@@ -23,14 +23,32 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
   const [deletePost, { isLoading: _ }] = useDeletePostMutation()
   const [upvotePost, { isLoading: upvoting }] = useUpvotePostMutation()
   const [downvotePost, { isLoading: downvoting }] = useDownvotePostMutation()
-  const [menuOpen, setMenuOpen] = React.useState(false)
-  const menuRef = useRef(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLUListElement>(null)
 
   const timeAgo = new TimeAgo("en-US")
 
-  const toggleMenu = () => {
+  const handleIconClick = () => {
     setMenuOpen(!menuOpen)
   }
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setMenuOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [menuOpen])
 
   const timeDiff = timeAgo.format(new Date(post.createdAt))
 
@@ -65,7 +83,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
           </div>
           {post.authorId === userId && (
             <div className="relative flex flex-col items-end">
-              <Button onClick={toggleMenu} shape="circle" color="ghost">
+              <Button onClick={handleIconClick} shape="circle" color="ghost">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -77,6 +95,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
                   <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
                 </svg>
               </Button>
+
               {menuOpen && (
                 <Menu
                   ref={menuRef}
