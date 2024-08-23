@@ -25,6 +25,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
   const [downvotePost, { isLoading: downvoting }] = useDownvotePostMutation()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLUListElement>(null)
+  const removeBtnRef = useRef<HTMLElement>(null)
 
   const timeAgo = new TimeAgo("en-US")
 
@@ -33,7 +34,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
   }
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(event.target as Node) &&
+      removeBtnRef.current &&
+      !removeBtnRef.current.contains(event.target as Node)
+    ) {
       setMenuOpen(false)
     }
   }
@@ -83,7 +89,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
           </div>
           {post.authorId === userId && (
             <div className="relative flex flex-col items-end">
-              <Button onClick={handleIconClick} shape="circle" color="ghost">
+              <Button
+                ref={removeBtnRef}
+                onClick={handleIconClick}
+                shape="circle"
+                color="ghost"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
