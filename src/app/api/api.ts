@@ -1,13 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import {
+  Comment,
   CREATE_POST_REQ_BODY,
   FetchedChats,
+  FetchedCommentResponse,
+  FetchedCommentsResponse,
   FetchedPostResponse,
   FetchedPosts,
   FetchedVotedPost,
   MessagesData,
+  Post,
   ProfileData,
   SearchedUsers,
+  VOTE_COMMENT_PAYLOAD,
 } from "../../utils/types"
 import { RootState } from "../store"
 import { downvoteHelper, upvoteHelper } from "../../utils/helper"
@@ -25,6 +30,7 @@ const api = createApi({
     "Post",
     "Posts",
     "UserPosts",
+    "Comments",
   ],
 
   endpoints: (builder) => ({
@@ -125,7 +131,7 @@ const api = createApi({
               (post) => post.id === postId
             )
             // upvote helper
-            upvoteHelper(draft, postIndex, authorId)
+            upvoteHelper<Post>(draft.posts, postIndex, authorId)
           })
         )
 
@@ -135,7 +141,7 @@ const api = createApi({
               (post) => post.id === postId
             )
             // upvote helper
-            upvoteHelper(draft, postIndex, authorId)
+            upvoteHelper<Post>(draft.posts, postIndex, authorId)
           })
         )
 
@@ -163,7 +169,7 @@ const api = createApi({
               (post) => post.id === postId
             )
             // downvote helper
-            downvoteHelper(draft, postIndex, authorId)
+            downvoteHelper<Post>(draft.posts, postIndex, authorId)
           })
         )
         const patchGetUserPosts = dispatch(
@@ -172,7 +178,7 @@ const api = createApi({
               (post) => post.id === postId
             )
             // downvote helper
-            downvoteHelper(draft, postIndex, authorId)
+            downvoteHelper<Post>(draft.posts, postIndex, authorId)
           })
         )
 
@@ -181,6 +187,80 @@ const api = createApi({
         } catch (error) {
           patchGetPosts.undo()
           patchGetUserPosts.undo()
+        }
+      },
+    }),
+    getPostComments: builder.query<FetchedCommentsResponse, string>({
+      query: (postId) => ({
+        url: `/post/post-comments/${postId}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Comments"],
+    }),
+    upvoteComment: builder.mutation<
+      FetchedCommentResponse,
+      VOTE_COMMENT_PAYLOAD
+    >({
+      query: (ids) => ({
+        url: `/post/comment/upvote/${ids.commentId}`,
+        method: "PUT",
+        credentials: "include",
+      }),
+      async onQueryStarted(
+        { postId, commentId },
+        { dispatch, queryFulfilled, getState }
+      ) {
+        const state = getState() as RootState
+        const authorId = state.auth.user?.id as string
+
+        const result = dispatch(
+          api.util.updateQueryData("getPostComments", postId, (draft) => {
+            const commentIndex = draft.comments.findIndex(
+              (comment) => comment.id === commentId
+            )
+            // upvote helper
+            upvoteHelper<Comment>(draft.comments, commentIndex, authorId)
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          result.undo()
+        }
+      },
+    }),
+    downvoteComment: builder.mutation<
+      FetchedCommentResponse,
+      VOTE_COMMENT_PAYLOAD
+    >({
+      query: (ids) => ({
+        url: `/post/comment/downvote/${ids.commentId}`,
+        method: "PUT",
+        credentials: "include",
+      }),
+      async onQueryStarted(
+        { postId, commentId },
+        { dispatch, queryFulfilled, getState }
+      ) {
+        const state = getState() as RootState
+        const authorId = state.auth.user?.id as string
+
+        const result = dispatch(
+          api.util.updateQueryData("getPostComments", postId, (draft) => {
+            const commentIndex = draft.comments.findIndex(
+              (comment) => comment.id === commentId
+            )
+            // downvote helper
+            downvoteHelper<Comment>(draft.comments, commentIndex, authorId)
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch (error) {
+          result.undo()
         }
       },
     }),
@@ -200,4 +280,7 @@ export const {
   useDeletePostMutation,
   useUpvotePostMutation,
   useDownvotePostMutation,
+  useGetPostCommentsQuery,
+  useUpvoteCommentMutation,
+  useDownvoteCommentMutation,
 } = api

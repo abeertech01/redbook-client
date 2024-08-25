@@ -98,6 +98,7 @@ export interface Post {
   downvoteIds: string[]
   authorId: string
   author: User
+  comments?: Comment[]
 }
 
 export interface FetchedPosts {
@@ -119,4 +120,31 @@ export interface CREATE_POST_REQ_BODY {
   title: string
   content: string
   authorId: string
+}
+
+export interface Comment {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  content: string
+  upvoteIds: string[]
+  downvoteIds: string[]
+  authorId: string
+  author?: User
+  postId: string
+}
+
+export interface FetchedCommentsResponse {
+  success: boolean
+  comments: Comment[]
+}
+
+export interface FetchedCommentResponse {
+  success: boolean
+  comment: Comment
+}
+
+export interface VOTE_COMMENT_PAYLOAD {
+  commentId: string
+  postId: string
 }

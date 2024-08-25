@@ -1,5 +1,5 @@
 import numbro from "numbro"
-import { AxiosError, FetchedPosts } from "./types"
+import { AxiosError, FetchedPosts, Post } from "./types"
 
 function isAxiosError(error: any): error is AxiosError {
   return (
@@ -46,48 +46,50 @@ const formatNumber = (value: number): string => {
   })
 }
 
-const upvoteHelper = (
-  draft: FetchedPosts,
-  postIndex: number,
+const upvoteHelper = <T extends { upvoteIds: string[]; downvoteIds: string[] }>(
+  draftItems: T[],
+  itemIndex: number,
   authorId: string
 ) => {
-  if (postIndex !== -1) {
-    if (!draft.posts[postIndex].upvoteIds.includes(authorId)) {
-      draft.posts[postIndex].upvoteIds.push(authorId)
+  if (itemIndex !== -1) {
+    if (!draftItems[itemIndex].upvoteIds.includes(authorId)) {
+      draftItems[itemIndex].upvoteIds.push(authorId)
 
-      if (draft.posts[postIndex].downvoteIds.includes(authorId)) {
-        draft.posts[postIndex].downvoteIds.splice(
-          draft.posts[postIndex].downvoteIds.indexOf(authorId),
+      if (draftItems[itemIndex].downvoteIds.includes(authorId)) {
+        draftItems[itemIndex].downvoteIds.splice(
+          draftItems[itemIndex].downvoteIds.indexOf(authorId),
           1
         )
       }
     } else {
-      draft.posts[postIndex].upvoteIds.splice(
-        draft.posts[postIndex].upvoteIds.indexOf(authorId),
+      draftItems[itemIndex].upvoteIds.splice(
+        draftItems[itemIndex].upvoteIds.indexOf(authorId),
         1
       )
     }
   }
 }
 
-const downvoteHelper = (
-  draft: FetchedPosts,
-  postIndex: number,
+const downvoteHelper = <
+  T extends { upvoteIds: string[]; downvoteIds: string[] }
+>(
+  draft: T[],
+  itemIndex: number,
   authorId: string
 ) => {
-  if (postIndex !== -1) {
-    if (!draft.posts[postIndex].downvoteIds.includes(authorId)) {
-      draft.posts[postIndex].downvoteIds.push(authorId)
+  if (itemIndex !== -1) {
+    if (!draft[itemIndex].downvoteIds.includes(authorId)) {
+      draft[itemIndex].downvoteIds.push(authorId)
 
-      if (draft.posts[postIndex].upvoteIds.includes(authorId)) {
-        draft.posts[postIndex].upvoteIds.splice(
-          draft.posts[postIndex].upvoteIds.indexOf(authorId),
+      if (draft[itemIndex].upvoteIds.includes(authorId)) {
+        draft[itemIndex].upvoteIds.splice(
+          draft[itemIndex].upvoteIds.indexOf(authorId),
           1
         )
       }
     } else {
-      draft.posts[postIndex].downvoteIds.splice(
-        draft.posts[postIndex].downvoteIds.indexOf(authorId),
+      draft[itemIndex].downvoteIds.splice(
+        draft[itemIndex].downvoteIds.indexOf(authorId),
         1
       )
     }

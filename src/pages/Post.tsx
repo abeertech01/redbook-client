@@ -14,6 +14,7 @@ import commentIcon from "../assets/icons/comment-plain.png"
 import shareIcon from "../assets/icons/share-plain.png"
 import { formatNumber } from "../utils/helper"
 import Comment from "../components/Comment"
+import Comments from "../components/Comments"
 
 type PostProps = {}
 
@@ -143,39 +144,7 @@ const Post: React.FC<PostProps> = () => {
           </div>
           <hr className="border-[#676767]" />
           <div className="">
-            {/* comments */}
-            <ul className="flex flex-col gap-2">
-              <Comment
-                authorId={data?.post.authorId as string}
-                upvoteThisPost={upvoteThisPost}
-                upvoting={upvoting}
-                upvoteIds={data?.post.upvoteIds!}
-                downvoteThisPost={downvoteThisPost}
-                downvoteIds={data?.post.downvoteIds!}
-                downvoting={downvoting}
-                name={data?.post.author.name!}
-              />
-              <li className="p-4 bg-base-100 rounded-xl mt-4">
-                <div className="flex gap-2 items-center rounded-md mb-2">
-                  <div className="w-8 rounded-full">
-                    <img
-                      alt="Tailwind CSS Navbar component"
-                      src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F024%2F183%2F502%2Fnon_2x%2Fmale-avatar-portrait-of-a-young-man-with-a-beard-illustration-of-male-character-in-modern-color-style-vector.jpg&f=1&nofb=1&ipt=4a1ff16d454684097e36264e34ac945a012cf952721b445349c010a173cc1857&ipo=images"
-                      className="w-full h-full rounded-full"
-                    />
-                  </div>
-                  <div className="overflow-hidden">
-                    <h1 className="text-[1rem]">
-                      {data?.post.author.name} • 2 hours ago
-                    </h1>
-                  </div>
-                </div>
-                <p className="text-[0.9rem]">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic,
-                  dignissimos sed. Maiores optio sit asperiores.
-                </p>
-              </li>
-            </ul>
+            <Comments postId={data?.post.id as string} />
           </div>
         </div>
       </div>

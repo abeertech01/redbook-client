@@ -3,28 +3,33 @@ import React from "react"
 import upArrow from "../assets/icons/arrow-up-plain.png"
 import { formatNumber } from "../utils/helper"
 import downArrow from "../assets/icons/arrow-down-plain.png"
+import {
+  useDownvoteCommentMutation,
+  useUpvoteCommentMutation,
+} from "../app/api/api"
+import { Comment } from "../utils/types"
+import TimeAgo from "javascript-time-ago"
 
 type CommentProps = {
-  name: string
-  upvoting: boolean
-  upvoteThisPost: () => void
-  upvoteIds: string[]
-  authorId: string
-  downvoteThisPost: () => void
-  downvoting: boolean
-  downvoteIds: string[]
+  comment: Comment
 }
 
-const Comment: React.FC<CommentProps> = ({
-  name,
-  upvoting,
-  upvoteThisPost,
-  upvoteIds,
-  authorId,
-  downvoteThisPost,
-  downvoting,
-  downvoteIds,
-}) => {
+const CommentComp: React.FC<CommentProps> = ({ comment }) => {
+  const timeAgo = new TimeAgo("en-US")
+  const [upvoteComment, { isLoading: upvoting }] = useUpvoteCommentMutation()
+  const [downvoteComment, { isLoading: downvoting }] =
+    useDownvoteCommentMutation()
+
+  const upvoteThisComment = async () => {
+    await upvoteComment({ postId: comment.postId, commentId: comment.id })
+  }
+
+  const downvoteThisComment = async () => {
+    await downvoteComment({ postId: comment.postId, commentId: comment.id })
+  }
+
+  const timeDiff = timeAgo.format(new Date(comment.createdAt))
+
   return (
     <li className="p-4 bg-base-100 rounded-xl mt-4">
       <div className="flex gap-2 items-center rounded-md mb-2">
@@ -37,7 +42,7 @@ const Comment: React.FC<CommentProps> = ({
         </div>
         <div className="overflow-hidden">
           <h1 className="text-[1rem]">
-            {name} • <small>2 hours ago</small>
+            {comment.author?.name} • <small>{timeDiff}</small>
           </h1>
         </div>
       </div>
@@ -48,29 +53,29 @@ const Comment: React.FC<CommentProps> = ({
       <div className="flex justify-start items-center space-x-4 mt-2">
         <span className="flex justify-between gap-1 items-center bg-gray-700 text-white rounded-full px-2 py-[5px]">
           <button
-            onClick={upvoteThisPost}
+            onClick={upvoteThisComment}
             disabled={upvoting}
             className={clsx(
               "flex items-center gap-1 text-[0.8rem] px-2 py-1 rounded-xl",
-              upvoteIds.includes(authorId as string) &&
+              comment.upvoteIds.includes(comment.authorId as string) &&
                 "bg-[#ebebeb7f] shadow-sm shadow-[#eaeaea6a]"
             )}
           >
             <img src={upArrow} alt="" className="h-[17px] inline-block" />
-            {formatNumber(upvoteIds.length as number)}
+            {formatNumber(comment.upvoteIds.length as number)}
           </button>
           |
           <button
-            onClick={downvoteThisPost}
+            onClick={downvoteThisComment}
             disabled={downvoting}
             className={clsx(
               "flex items-center gap-1 text-[0.8rem] px-2 py-1 rounded-xl",
-              downvoteIds.includes(authorId as string) &&
+              comment.downvoteIds.includes(comment.authorId as string) &&
                 "bg-[#ebebeb42] shadow-sm shadow-[#eaeaea6a]"
             )}
           >
             <img src={downArrow} alt="" className="h-[17px] inline-block" />
-            {formatNumber(downvoteIds.length as number)}
+            {formatNumber(comment.downvoteIds.length as number)}
           </button>
         </span>
         {/* <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
@@ -87,4 +92,4 @@ const Comment: React.FC<CommentProps> = ({
     </li>
   )
 }
-export default Comment
+export default CommentComp
