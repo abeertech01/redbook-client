@@ -19,7 +19,7 @@ export interface ProfileData {
 
 export interface FetchedChats {
   success: boolean
-  chats: [Chat]
+  chats: Chat[]
 }
 
 export interface Chat {
@@ -27,7 +27,7 @@ export interface Chat {
   createdAt: Date
   updatedAt: Date
   creatorId: string
-  members: [User]
+  members: User[]
   theOtherUserIndex: number
 }
 
@@ -41,12 +41,12 @@ export interface InboxMessage {
 
 export interface MessagesData {
   success: boolean
-  messages: [InboxMessage]
+  messages: InboxMessage[]
 }
 
 export interface SearchedUsers {
   success: boolean
-  users: [SearchedUser]
+  users: SearchedUser[]
 }
 
 export interface SearchedUser {
@@ -73,7 +73,7 @@ export interface AuthInitialStateType {
 }
 
 export interface PostInitialStateType {
-  posts: [Post] | null
+  posts: Post[] | null
 }
 
 export interface AxiosError {
@@ -94,18 +94,57 @@ export interface Post {
   updatedAt: Date
   title: string
   content: string
-  upvote: number
-  downvote: number
+  upvoteIds: string[]
+  downvoteIds: string[]
   authorId: string
   author: User
+  comments?: Comment[]
 }
 
 export interface FetchedPosts {
   success: boolean
-  posts: [Post]
+  posts: Post[]
 }
 
-export interface CREATE_POST_INPUTS {
+// FIXME: Delete This later
+export interface FetchedVotedPost {
+  success: boolean
+  post: Post
+}
+export interface FetchedPostResponse {
+  success: boolean
+  post: Post
+}
+
+export interface CREATE_POST_REQ_BODY {
   title: string
   content: string
+  authorId: string
+}
+
+export interface Comment {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  content: string
+  upvoteIds: string[]
+  downvoteIds: string[]
+  authorId: string
+  author?: User
+  postId: string
+}
+
+export interface FetchedCommentsResponse {
+  success: boolean
+  comments: Comment[]
+}
+
+export interface FetchedCommentResponse {
+  success: boolean
+  comment: Comment
+}
+
+export interface VOTE_COMMENT_PAYLOAD {
+  commentId: string
+  postId: string
 }
