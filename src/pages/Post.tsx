@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import {
+  useAddCommentMutation,
   useDownvotePostMutation,
   useGetPostQuery,
   useUpvotePostMutation,
@@ -13,16 +14,20 @@ import downArrow from "../assets/icons/arrow-down-plain.png"
 import commentIcon from "../assets/icons/comment-plain.png"
 import shareIcon from "../assets/icons/share-plain.png"
 import { formatNumber } from "../utils/helper"
-import Comment from "../components/Comment"
 import Comments from "../components/Comments"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import { useSelector } from "react-redux"
+import { RootState } from "../app/store"
 
 type PostProps = {}
 
 const Post: React.FC<PostProps> = () => {
   const { id: postId } = useParams()
+  const { user } = useSelector((state: RootState) => state.auth)
   const { data, isLoading, isError: __ } = useGetPostQuery(postId as string)
   const [upvotePost, { isLoading: upvoting }] = useUpvotePostMutation()
   const [downvotePost, { isLoading: downvoting }] = useDownvotePostMutation()
+  const [addComment, { isLoading: adding }] = useAddCommentMutation()
 
   const timeAgo = new TimeAgo("en-US")
   let [timeDiff, setTimeDiff] = useState("")
@@ -40,6 +45,19 @@ const Post: React.FC<PostProps> = () => {
   const downvoteThisPost = async () => {
     console.log("downvoted")
     await downvotePost(data?.post.id as string)
+  }
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+
+  const onSubmit: SubmitHandler<FieldValues> = async (formData) => {
+    await addComment({
+      ...formData,
+      postId: data?.post.id as string,
+    })
   }
 
   if (isLoading) return <h1>Loading...</h1>
@@ -132,19 +150,30 @@ const Post: React.FC<PostProps> = () => {
               </span>
             </div>
           </div>
-          <div className="my-4 flex items-start gap-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="my-4 flex items-start gap-4"
+          >
             <textarea
-              className="textarea textarea-bordered w-full flex-1"
+              className="textarea textarea-bordered w-full flex-1 text-base"
               placeholder="Add a comment..."
+              {...register("content")}
               rows={4}
             ></textarea>
-            <button className="btn btn-primary float-right w-[6rem]">
-              Comment
+            <button
+              type="submit"
+              disabled={adding}
+              className="btn btn-primary float-right w-[6rem]"
+            >
+              {adding ? "Commenting..." : "Comment"}
             </button>
-          </div>
+          </form>
           <hr className="border-[#676767]" />
           <div className="">
-            <Comments postId={data?.post.id as string} />
+            <Comments
+              userId={user?.id as string}
+              postId={data?.post.id as string}
+            />
           </div>
         </div>
       </div>

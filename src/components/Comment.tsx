@@ -12,9 +12,10 @@ import TimeAgo from "javascript-time-ago"
 
 type CommentProps = {
   comment: Comment
+  userId: string
 }
 
-const CommentComp: React.FC<CommentProps> = ({ comment }) => {
+const CommentComp: React.FC<CommentProps> = ({ comment, userId }) => {
   const timeAgo = new TimeAgo("en-US")
   const [upvoteComment, { isLoading: upvoting }] = useUpvoteCommentMutation()
   const [downvoteComment, { isLoading: downvoting }] =
@@ -46,10 +47,7 @@ const CommentComp: React.FC<CommentProps> = ({ comment }) => {
           </h1>
         </div>
       </div>
-      <p className="text-[0.9rem]">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic,
-        dignissimos sed. Maiores optio sit asperiores.
-      </p>
+      <p className="text-[0.9rem]">{comment.content}</p>
       <div className="flex justify-start items-center space-x-4 mt-2">
         <span className="flex justify-between gap-1 items-center bg-gray-700 text-white rounded-full px-2 py-[5px]">
           <button
@@ -57,8 +55,8 @@ const CommentComp: React.FC<CommentProps> = ({ comment }) => {
             disabled={upvoting}
             className={clsx(
               "flex items-center gap-1 text-[0.8rem] px-2 py-1 rounded-xl",
-              comment.upvoteIds.includes(comment.authorId as string) &&
-                "bg-[#ebebeb7f] shadow-sm shadow-[#eaeaea6a]"
+              comment.upvoteIds.includes(userId as string) &&
+                "bg-[#ebebeb42] shadow-sm shadow-[#eaeaea6a]"
             )}
           >
             <img src={upArrow} alt="" className="h-[17px] inline-block" />
@@ -70,7 +68,7 @@ const CommentComp: React.FC<CommentProps> = ({ comment }) => {
             disabled={downvoting}
             className={clsx(
               "flex items-center gap-1 text-[0.8rem] px-2 py-1 rounded-xl",
-              comment.downvoteIds.includes(comment.authorId as string) &&
+              comment.downvoteIds.includes(userId as string) &&
                 "bg-[#ebebeb42] shadow-sm shadow-[#eaeaea6a]"
             )}
           >

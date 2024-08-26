@@ -3,7 +3,7 @@ import upArrow from "../assets/icons/arrow-up-plain.png"
 import downArrow from "../assets/icons/arrow-down-plain.png"
 import commentIcon from "../assets/icons/comment-plain.png"
 import shareIcon from "../assets/icons/share-plain.png"
-import { Post } from "../utils/types"
+import { Comment, Post } from "../utils/types"
 import { Button, Menu } from "react-daisyui"
 import {
   useDeletePostMutation,
@@ -182,7 +182,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
                   alt=""
                   className="h-[20px] inline-block"
                 />
-                4.1K
+                {post.comments ? formatNumber(post.comments.length) : 0}
               </button>
             </span>
             <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">

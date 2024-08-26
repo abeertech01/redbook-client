@@ -198,6 +198,15 @@ const api = createApi({
       }),
       providesTags: ["Comments"],
     }),
+    addComment: builder.mutation<any, any>({
+      query: (newComment) => ({
+        url: `/post/add-comment`,
+        method: "POST",
+        body: newComment,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Comments"],
+    }),
     upvoteComment: builder.mutation<
       FetchedCommentResponse,
       VOTE_COMMENT_PAYLOAD
@@ -281,6 +290,7 @@ export const {
   useUpvotePostMutation,
   useDownvotePostMutation,
   useGetPostCommentsQuery,
+  useAddCommentMutation,
   useUpvoteCommentMutation,
   useDownvoteCommentMutation,
 } = api
