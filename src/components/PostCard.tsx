@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react"
 import upArrow from "../assets/icons/arrow-up-plain.png"
 import downArrow from "../assets/icons/arrow-down-plain.png"
 import commentIcon from "../assets/icons/comment-plain.png"
-import shareIcon from "../assets/icons/share-plain.png"
-import { Comment, Post } from "../utils/types"
+// import shareIcon from "../assets/icons/share-plain.png"
+import { Post } from "../utils/types"
 import { Button, Menu } from "react-daisyui"
 import {
   useDeletePostMutation,
@@ -172,10 +172,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
                 {formatNumber(post.downvoteIds.length)}
               </button>
             </span>
-            <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
+            <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full">
               <button
                 onClick={() => navigate(`/post/${post.id}`)}
-                className="flex items-center gap-2 text-[0.9rem]"
+                className="flex items-center gap-2 text-[0.9rem] px-4 py-2"
               >
                 <img
                   src={commentIcon}
@@ -185,12 +185,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, userId }) => {
                 {post.comments ? formatNumber(post.comments.length) : 0}
               </button>
             </span>
-            <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
+            {/* <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
               <button className="flex items-center gap-2 text-[0.9rem]">
                 <img src={shareIcon} alt="" className="h-[20px] inline-block" />
                 4.1K
               </button>
-            </span>
+            </span> */}
           </div>
         </div>
       </div>

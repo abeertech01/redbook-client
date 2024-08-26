@@ -107,7 +107,7 @@ const api = createApi({
     /**
      * FIXME: same as createPost
      */
-    deletePost: builder.mutation<void, string>({
+    deletePost: builder.mutation<FetchedPostResponse, string>({
       query: (postId) => ({
         url: `/post/delete-post/${postId}`,
         method: "DELETE",
@@ -273,6 +273,14 @@ const api = createApi({
         }
       },
     }),
+    deleteComment: builder.mutation<FetchedCommentResponse, string>({
+      query: (commentId) => ({
+        url: `/post/delete-comment/${commentId}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Comments"],
+    }),
   }),
 })
 
@@ -293,4 +301,5 @@ export const {
   useAddCommentMutation,
   useUpvoteCommentMutation,
   useDownvoteCommentMutation,
+  useDeleteCommentMutation,
 } = api

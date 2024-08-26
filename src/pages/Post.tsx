@@ -12,7 +12,7 @@ import clsx from "clsx"
 import upArrow from "../assets/icons/arrow-up-plain.png"
 import downArrow from "../assets/icons/arrow-down-plain.png"
 import commentIcon from "../assets/icons/comment-plain.png"
-import shareIcon from "../assets/icons/share-plain.png"
+// import shareIcon from "../assets/icons/share-plain.png"
 import { formatNumber } from "../utils/helper"
 import Comments from "../components/Comments"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
@@ -28,6 +28,7 @@ const Post: React.FC<PostProps> = () => {
   const [upvotePost, { isLoading: upvoting }] = useUpvotePostMutation()
   const [downvotePost, { isLoading: downvoting }] = useDownvotePostMutation()
   const [addComment, { isLoading: adding }] = useAddCommentMutation()
+  const [commentNum, setCommentNum] = useState(0)
 
   const timeAgo = new TimeAgo("en-US")
   let [timeDiff, setTimeDiff] = useState("")
@@ -36,6 +37,8 @@ const Post: React.FC<PostProps> = () => {
     if (data?.success)
       setTimeDiff(timeAgo.format(new Date(data?.post?.createdAt)))
   }, [data])
+
+  const incCommentNum = (commentNumPar: number) => setCommentNum(commentNumPar)
 
   const upvoteThisPost = async () => {
     console.log("upvoted")
@@ -50,6 +53,7 @@ const Post: React.FC<PostProps> = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm()
 
@@ -58,6 +62,8 @@ const Post: React.FC<PostProps> = () => {
       ...formData,
       postId: data?.post.id as string,
     })
+
+    reset()
   }
 
   if (isLoading) return <h1>Loading...</h1>
@@ -135,10 +141,10 @@ const Post: React.FC<PostProps> = () => {
                     alt=""
                     className="h-[20px] inline-block"
                   />
-                  4.1K
+                  {formatNumber(commentNum as number)}
                 </button>
               </span>
-              <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
+              {/* <span className="flex justify-between gap-2 items-center bg-gray-800 text-white rounded-full px-4 py-2">
                 <button className="flex items-center gap-2 text-[0.9rem]">
                   <img
                     src={shareIcon}
@@ -147,7 +153,7 @@ const Post: React.FC<PostProps> = () => {
                   />
                   4.1K
                 </button>
-              </span>
+              </span> */}
             </div>
           </div>
           <form
@@ -173,6 +179,7 @@ const Post: React.FC<PostProps> = () => {
             <Comments
               userId={user?.id as string}
               postId={data?.post.id as string}
+              incCommentNum={incCommentNum}
             />
           </div>
         </div>
