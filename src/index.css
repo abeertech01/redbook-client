@@ -6,10 +6,6 @@
   @apply flex justify-center items-center;
 }
 
-.message-style {
-  @apply inline-block max-w-[70%] rounded-lg text-base bg-amber-200 text-black px-4 py-2;
-}
-
 .h8-minus-navbar {
   @apply h-[calc(100vh-66px)];
 }

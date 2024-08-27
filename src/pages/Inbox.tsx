@@ -9,6 +9,7 @@ import clsx from "clsx"
 import { useSelector } from "react-redux"
 import { RootState } from "../app/store"
 import { InboxMessage } from "../utils/types"
+import TimeAgo from "javascript-time-ago"
 
 type InboxProps = {}
 
@@ -17,6 +18,7 @@ const Inbox: React.FC<InboxProps> = () => {
   const [message, setMessage] = useState("")
   const socket = getSocket()
   const { user } = useSelector((state: RootState) => state.auth)
+  const timeAgo = new TimeAgo("en-US")
 
   const chatId = pathname.match(/\/chat\/(.*)/)![1]
 
@@ -44,6 +46,8 @@ const Inbox: React.FC<InboxProps> = () => {
 
   useSocketEvents(socket!, eventHandler)
 
+  const timeDiff = (time: Date) => timeAgo.format(new Date(time))
+
   return (
     <>
       <div className="flex-1 flex items-end p-4">
@@ -55,31 +59,24 @@ const Inbox: React.FC<InboxProps> = () => {
                 <li key={msg.id}>
                   <div
                     className={clsx(
-                      "message-style",
-                      msg.authorId === user?.id
-                        ? "float-right !bg-red-500 !text-white"
-                        : ""
+                      "flex flex-col gap-1",
+                      msg.authorId === user?.id ? "items-end" : "items-start"
                     )}
                   >
-                    {msg.text}
+                    <span
+                      className={clsx(
+                        "rounded-lg text-base bg-amber-200 text-black px-4 py-2 max-w-[70%]",
+                        msg.authorId === user?.id
+                          ? "!bg-red-500 !text-white"
+                          : ""
+                      )}
+                    >
+                      {msg.text}
+                    </span>
+                    <small>{timeDiff(msg.createdAt)}</small>
                   </div>
                 </li>
               ))}
-            {/* <li>
-            <div className="message-style">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui,
-              reiciendis!
-            </div>
-          </li>
-          <li>
-            <div className="message-style float-right !bg-red-500 !text-white">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui,
-              reiciendis!
-            </div>
-          </li>
-          <li>
-            <div className="message-style">Lorem ipsum dolor</div>
-          </li> */}
           </ul>
         )}
       </div>
