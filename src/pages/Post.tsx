@@ -160,12 +160,26 @@ const Post: React.FC<PostProps> = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="my-4 flex items-start gap-4"
           >
-            <textarea
-              className="textarea textarea-bordered w-full flex-1 text-base"
-              placeholder="Add a comment..."
-              {...register("content")}
-              rows={4}
-            ></textarea>
+            <div className="flex-1">
+              <textarea
+                className="textarea textarea-bordered w-full text-base"
+                placeholder="Add a comment..."
+                {...register("content", {
+                  required: "Comment is empty",
+                  minLength: {
+                    value: 3,
+                    message: "Comment must be at least 3 characters",
+                  },
+                })}
+                rows={4}
+              ></textarea>
+              {errors.content && (
+                <p className="text-red-500 mt-2">
+                  {errors.content.message as string}
+                </p>
+              )}
+            </div>
+
             <button
               type="submit"
               disabled={adding}

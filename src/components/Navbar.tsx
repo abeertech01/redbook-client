@@ -51,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                 className="input input-bordered w-24 md:w-auto bg-slate-50 text-black placeholder-slate-500"
               />
             </div>
-            <Link to={"/chat"} className="btn btn-[#ef4444] text-white">
+            <Link to={"/chat"} className="btn btn-[#ef4444]">
               Chat
             </Link>
           </>

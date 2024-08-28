@@ -22,7 +22,7 @@ const Profile: React.FC<ProfileProps> = () => {
           className="w-full aspect-[9/3] object-cover border-b-2 border-r-2 border-l-2 border-b-zinc-500 border-l-zinc-500 border-r-zinc-500 rounded-b-lg shadow-md shadow-gray-800"
         />
         <div className="flex items-center gap-4 -translate-y-[20%]">
-          <div className="w-[160px] h-[160px] ml-[3rem] shadow-lg">
+          <div className="w-[160px] h-[160px] ml-[3rem]">
             <img
               alt="Tailwind CSS Navbar component"
               src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F024%2F183%2F502%2Fnon_2x%2Fmale-avatar-portrait-of-a-young-man-with-a-beard-illustration-of-male-character-in-modern-color-style-vector.jpg&f=1&nofb=1&ipt=4a1ff16d454684097e36264e34ac945a012cf952721b445349c010a173cc1857&ipo=images"

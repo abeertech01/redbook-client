@@ -56,7 +56,7 @@ const Chat: React.FC<ChatProps> = () => {
     <div>
       <Navbar />
       <div className="flex h8-minus-navbar">
-        <div className="w-[25%] bg-[#171c22]">
+        <div className="w-[25%] bg-base-300">
           <div className="relative m-4">
             <label className="relative input input-bordered flex items-center gap-2">
               <input
@@ -100,7 +100,7 @@ const Chat: React.FC<ChatProps> = () => {
                 <li
                   key={chat.id}
                   onClick={() => selectConversation(chat.id)}
-                  className="grid grid-cols-[3rem_auto] gap-x-4 p-2 mx-4 items-center hover:bg-[#252d37] hover:cursor-pointer [&:not(:first-child)]:mt-4 rounded-md"
+                  className="grid grid-cols-[3rem_auto] gap-x-4 p-2 mx-4 items-center hover:bg-base-100 hover:cursor-pointer [&:not(:first-child)]:mt-4 rounded-md"
                 >
                   <div className="w-12 rounded-full">
                     <img
@@ -137,7 +137,7 @@ const Chat: React.FC<ChatProps> = () => {
           </div>
           <Outlet />
         </div>
-        <div className="w-[25%] bg-[#171c22]"></div>
+        <div className="w-[25%] bg-base-300"></div>
       </div>
     </div>
   )

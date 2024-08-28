@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* or any other variables/style */
+/* :root {
+  --my-color: #fff;
+}
+[data-theme="dark"] {
+  --my-color: #000;
+}
+[data-theme="pink"] {
+  --my-color: #ffabc8;
+}
+
+body {
+  background-color: var(--my-color);
+} */
+
 .centering {
   @apply flex justify-center items-center;
 }

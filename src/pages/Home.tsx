@@ -31,10 +31,10 @@ const Home: React.FC<HomeProps> = () => {
         <CreatePostModal toggleCreatePostModal={toggleCreatePostModal} />
       )}
       <div className="_3cols">
-        <div className="flex-1 h-full">
+        <div className="flex-1 h-full flex flex-col">
           <button
             onClick={() => navigate("/profile")}
-            className="hover:bg-[#EE466E] text-white w-[320px] py-3 px-3 text-left rounded-lg"
+            className="hover:bg-[#EE466E] hover:text-white w-[320px] py-3 px-3 text-left rounded-lg"
           >
             <img
               src={profileAvatar}
@@ -76,7 +76,18 @@ const Home: React.FC<HomeProps> = () => {
             ))}
           </ul> */}
         </div>
-        <div className="flex-1 h-full"></div>
+        <div className="flex-1 h-full flex justify-end">
+          {/* <select
+            className="select select-bordered w-full max-w-xs"
+            data-choose-theme
+          >
+            <option value="" disabled selected>
+              Default
+            </option>
+            <option value="retro">Retro</option>
+            <option value="cmyk">cmyk</option>
+          </select> */}
+        </div>
       </div>
     </div>
   )

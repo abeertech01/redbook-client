@@ -82,7 +82,7 @@ const Inbox: React.FC<InboxProps> = () => {
       </div>
       <form
         onSubmit={sendMessage}
-        className="h-[80px] bg-slate-950 px-4 py-2 flex items-center gap-4"
+        className="h-[80px] bg-primary-content px-4 py-2 flex items-center gap-4"
       >
         <input
           type="text"
