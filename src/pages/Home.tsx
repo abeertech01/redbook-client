@@ -11,6 +11,8 @@ import { useSelector } from "react-redux"
 import { RootState } from "../app/store"
 import Posts from "../components/Posts"
 import { Post } from "../utils/types"
+import { useEffect } from "react"
+import { themeChange } from "theme-change"
 
 type HomeProps = {}
 
@@ -24,6 +26,11 @@ const Home: React.FC<HomeProps> = () => {
     setCPModalOpen((prev) => !prev)
   }
 
+  useEffect(() => {
+    themeChange(false)
+    // 👆 false parameter is required for react project
+  }, [])
+
   return (
     <div>
       <Navbar />
@@ -34,7 +41,7 @@ const Home: React.FC<HomeProps> = () => {
         <div className="flex-1 h-full flex flex-col">
           <button
             onClick={() => navigate("/profile")}
-            className="hover:bg-[#EE466E] hover:text-white w-[320px] py-3 px-3 text-left rounded-lg"
+            className="hover:bg-[#EE466E] bg-base-200 hover:text-white w-[320px] py-3 px-3 text-left rounded-lg"
           >
             <img
               src={profileAvatar}
@@ -77,16 +84,18 @@ const Home: React.FC<HomeProps> = () => {
           </ul> */}
         </div>
         <div className="flex-1 h-full flex justify-end">
-          {/* <select
+          <select
             className="select select-bordered w-full max-w-xs"
             data-choose-theme
           >
-            <option value="" disabled selected>
-              Default
+            <option value="" selected>
+              Light
             </option>
+            <option value="dark">Dark</option>
             <option value="retro">Retro</option>
-            <option value="cmyk">cmyk</option>
-          </select> */}
+            <option value="lemonade">Lemonade</option>
+            <option value="cupcake">Cupcake</option>
+          </select>
         </div>
       </div>
     </div>

@@ -13,9 +13,9 @@ const Profile: React.FC<ProfileProps> = () => {
   }, [])
 
   return (
-    <div className="pb-4">
+    <div className="pb-4 bg-base-100">
       <Navbar />
-      <div className="w-[700px] mx-auto bg-base-100">
+      <div className="w-[700px] mx-auto">
         <img
           src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwallpapersmug.com%2Fdownload%2F1920x1080%2F81db8b%2Fhouses-winter-landscape-sunst.jpg&f=1&nofb=1&ipt=7f48003355431c022516bc28db7af842f8c4c745b347d6a1bbc9afe8b043caf4&ipo=images"
           alt=""

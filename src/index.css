@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* or any other variables/style */
-/* :root {
+:root {
   --my-color: #fff;
 }
 [data-theme="dark"] {
@@ -15,7 +15,7 @@
 
 body {
   background-color: var(--my-color);
-} */
+}
 
 .centering {
   @apply flex justify-center items-center;

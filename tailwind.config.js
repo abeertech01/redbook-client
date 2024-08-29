@@ -5,7 +5,7 @@ export default {
     extend: {},
   },
   daisyui: {
-    themes: ["retro"],
+    themes: ["light", "dark", "retro", "lemonade", "cupcake"],
   },
   plugins: [require("daisyui")],
 }
